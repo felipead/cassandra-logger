@@ -3,26 +3,31 @@ package org.apache.cassandra.logger.configuration;
 import org.apache.commons.lang3.EnumUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Configuration {
 
-    private static final String PROPERTIES_FILE_NAME = "LogTrigger.properties";
-    private static final Properties PROPERTIES = PropertiesLoader.loadFromFile(PROPERTIES_FILE_NAME);
-
     private String logKeyspace;
     private String logColumnFamily;    
-    private List<String> keyspacesToLog;
+    private Set<String> keyspacesToLog;
     private LoggingMode loggingMode;
         
-    public Configuration() {
-        logKeyspace = PROPERTIES.getProperty("logKeyspace", "LOGGER");
-        logColumnFamily = PROPERTIES.getProperty("logColumnFamily", "LOG");
-
-        loggingMode = getLoggingModeOrDefault(PROPERTIES.getProperty("loggingMode"), LoggingMode.LOG_ALL_KEYSPACES);
+    @SuppressWarnings("UnusedDeclaration")
+    public Configuration() throws IOException {
+        this("logger.properties");
+    }
+    
+    public Configuration(String propertiesFileName) throws IOException {
+        Properties properties = PropertiesLoader.loadFromFile(propertiesFileName);
         
-        keyspacesToLog = Collections.unmodifiableList(
-                splitByCommaStrippingWhitespace(PROPERTIES.getProperty("keyspacesToLog")));
+        logKeyspace = properties.getProperty("logKeyspace", "LOGGER");
+        logColumnFamily = properties.getProperty("logColumnFamily", "LOG");
+
+        loggingMode = getLoggingModeOrDefault(properties.getProperty("loggingMode"), LoggingMode.ALL_KEYSPACES);
+
+        keyspacesToLog = Collections.unmodifiableSet(
+                splitByCommaStrippingWhitespaceAndRemovingDuplicates(properties.getProperty("keyspacesToLog")));
     }
 
     public String getLogKeyspace() {
@@ -33,7 +38,7 @@ public class Configuration {
         return logColumnFamily;
     }
 
-    public List<String> getKeyspacesToLog() {
+    public Set<String> getKeyspacesToLog() {
         return keyspacesToLog;
     }
     
@@ -50,13 +55,15 @@ public class Configuration {
         }
     }
     
-    private static List<String> splitByCommaStrippingWhitespace(String string) {
+    private static Set<String> splitByCommaStrippingWhitespaceAndRemovingDuplicates(String string) {
         String[] tokens = StringUtils.split(string, ",");
-        List<String> stripedTokens = new ArrayList<>(tokens.length);
-        for (String token : tokens) {
-            token = StringUtils.strip(token);
-            if (!token.isEmpty()) {
-                stripedTokens.add(token);
+        Set<String> stripedTokens = new HashSet<>();
+        if (tokens != null) {
+            for (String token : tokens) {
+                token = StringUtils.strip(token);
+                if (!token.isEmpty()) {
+                    stripedTokens.add(token);
+                }
             }
         }
         return stripedTokens;
