@@ -11,7 +11,7 @@ public class ConfigurationLoaderTest {
     
     @Test
     public void loadDisabledLoggingConfiguration() throws IOException {
-        Configuration configuration = ConfigurationLoader.load("org/apache/cassandra/logger/configuration/Disabled.properties");
+        Configuration configuration = ConfigurationLoader.load("src/test/resources/org/apache/cassandra/logger/configuration/Disabled.properties");
         assertThat(configuration.getLoggingMode(), is(LoggingMode.DISABLED));
         assertThat(configuration.getKeyspacesToLog(), is(empty()));
         assertThat(configuration.getLogKeyspace(), is("test_logger"));
@@ -20,7 +20,7 @@ public class ConfigurationLoaderTest {
 
     @Test
     public void loadLogAllKeyspacesConfiguration() throws IOException {
-        Configuration configuration = ConfigurationLoader.load("org/apache/cassandra/logger/configuration/LogAllKeyspaces.properties");
+        Configuration configuration = ConfigurationLoader.load("src/test/resources/org/apache/cassandra/logger/configuration/LogAllKeyspaces.properties");
         assertThat(configuration.getLoggingMode(), is(LoggingMode.ALL_KEYSPACES));
         assertThat(configuration.getKeyspacesToLog(), is(empty()));
         assertThat(configuration.getLogKeyspace(), is("test_logger"));
@@ -29,7 +29,7 @@ public class ConfigurationLoaderTest {
 
     @Test
     public void loadLogOnlySpecifiedKeyspacesConfiguration() throws IOException {
-        Configuration configuration = ConfigurationLoader.load("org/apache/cassandra/logger/configuration/LogOnlySpecifiedKeyspaces.properties");
+        Configuration configuration = ConfigurationLoader.load("src/test/resources/org/apache/cassandra/logger/configuration/LogOnlySpecifiedKeyspaces.properties");
         assertThat(configuration.getLoggingMode(), is(LoggingMode.ONLY_SPECIFIED_KEYSPACES));
         assertThat(configuration.getKeyspacesToLog(), containsInAnyOrder("products", "users", "items", "orders"));
         assertThat(configuration.getLogKeyspace(), is("test_logger"));
