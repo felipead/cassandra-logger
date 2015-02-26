@@ -12,10 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("UnusedDeclaration")
 public class LoggerTrigger implements ITrigger {
@@ -42,15 +39,14 @@ public class LoggerTrigger implements ITrigger {
             logger.info("Processing log entry: {}", logEntry);
             
             Mutation mutation = mutationBuilder.build(logEntry);
-            logger.info("Built mutation: {}", mutation);
-
-            // FIXME: return mutation that was just built
+            logger.info("Adding mutation: {}", mutation);
+            
+            return Arrays.asList(mutation);
         } catch (Exception e) {
             logger.error("Exception while processing keyspace {}, column family {}, key {}:",
                     keyspace, columnFamily, keyText, e);
+            return Collections.emptyList();
         }
-
-        return Collections.emptyList();
     }
 
     private LogEntry buildLogEntry(ColumnFamily update, CFMetaData metadata, String keyspace, String columnFamily, String keyText) {
