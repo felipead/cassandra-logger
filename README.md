@@ -3,6 +3,8 @@ Cassandra Logger
 
 [Apache Cassandra](http://cassandra.apache.org) Trigger that creates a log of all data mutations. Useful to sync Cassandra with other databases, like Solr or Elastic Search.
 
+Version: 0.1 (not ready for production).
+
 Requirements
 ------------
 
@@ -19,7 +21,7 @@ You need a Java JDK 7 or 8. Please follow the instructions from the Oracle [webs
 
 ### Installing Cassandra
 
-The Trigger API was released as part of Cassandra 2.0. However, it was changed after Cassandra 2.1. This trigger will not work with previous Cassandra versions.
+The Trigger API was released as part of Cassandra 2.0. However, it was changed after Cassandra 2.1. This trigger *will not work* with versions of Cassandra previous to 2.1.
 
 Please follow the instructions from the Cassandra project [website](http://wiki.apache.org/cassandra/GettingStarted).
 
@@ -31,4 +33,18 @@ Please follow the instructions from the Gradle project [website](http://gradle.o
 
 ### Building the JAR
 
-WORK IN PROGRESS
+Enter the project root folder and type:
+
+    gradle assemble
+
+If the compilation is successful, the resulting JAR will be available at `build/libs/cassandra-logger-<version>.jar`.
+
+Copy the JAR to `{CASSANDRA_HOME}/conf/triggers`:
+
+    cp build/libs/cassandra-logger-0.1.jar {CASSANDRA_HOME}/conf/triggers
+
+
+Running Automated Tests
+-----------------------
+
+    gradle test
