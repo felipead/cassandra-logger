@@ -43,7 +43,7 @@ Copy the JAR to `{CASSANDRA_HOME}/conf/triggers`:
 
         cp build/libs/cassandra-logger-0.1.jar {CASSANDRA_HOME}/conf/triggers
 
-Restart Cassandra or tell it to reload the triggers:
+Start Cassandra (`{CASSANDRA_HOME}/bin/cassandra`) or tell it to reload the triggers:
 
         nodetool -h localhost reloadtriggers
 
@@ -55,7 +55,7 @@ You should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
 
 By default, the Log table will have the keyspace `logger` and column family `log`. The logger trigger needs both to be created beforehand, otherwise it will fail.
 
-Open the CQL terminal (`{CASSANDRA_HOME}/bin/cqlsh`) and run:
+Open the CLI (`{CASSANDRA_HOME}/bin/cassandra-cli`) and run:
 
         CREATE KEYSPACE logger;
         USE logger;
