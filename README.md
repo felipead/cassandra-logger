@@ -63,13 +63,13 @@ Open the CQL shell (`{CASSANDRA_HOME}/bin/cqlsh`) and run:
         
         CREATE TABLE IF NOT EXISTS log (
             id timeuuid PRIMARY KEY,
-            keyspace text,
-            column_family text,
+            keyspace_name text,
+            column_family_name text,
             key text,
             column_names text,
             operation_type text,
             timestamp timestamp
-        ) WITH CLUSTERING ORDER BY (timestamp desc);
+        );
 
 ### Create Triggers
 
