@@ -55,20 +55,21 @@ You should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
 
 By default, the Log table will have the keyspace `logger` and column family `log`. The logger trigger needs both to be created beforehand, otherwise it will fail.
 
-Open the CLI (`{CASSANDRA_HOME}/bin/cassandra-cli`) and run:
+Open the CQL shell (`{CASSANDRA_HOME}/bin/cqlsh`) and run:
 
-        CREATE KEYSPACE logger;
+        CREATE KEYSPACE IF NOT EXISTS logger 
+                WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
         USE logger;
         
-        CREATE TABLE log (
+        CREATE TABLE IF NOT EXISTS log (
             id timeuuid PRIMARY KEY,
             keyspace text,
             column_family text,
             key text,
-            column_name text,
-            operation text,
-            time timestamp
-        ) WITH CLUSTERING ORDER BY (time desc);
+            column_names text,
+            operation_type text,
+            timestamp timestamp
+        ) WITH CLUSTERING ORDER BY (timestamp desc);
 
 ### Create Triggers
 
