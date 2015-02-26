@@ -37,7 +37,7 @@ Enter the project root folder and type:
 
         gradle assemble
 
-If the compilation is successful, the resulting JAR will be available at `build/libs/cassandra-logger-<version>.jar`.
+If the compilation is successful, the resulting JAR will be available at `build/libs`.
 
 Copy the JAR to `{CASSANDRA_HOME}/conf/triggers`:
 
@@ -64,4 +64,4 @@ If you want to disable this trigger, you can use:
 Running Automated Tests
 -----------------------
 
-    gradle test
+        gradle test
