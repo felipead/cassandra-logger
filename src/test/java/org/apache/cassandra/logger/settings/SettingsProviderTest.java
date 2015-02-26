@@ -5,7 +5,7 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class SettingsSingletonTest {
+public class SettingsProviderTest {
     
     @Test
     public void loadDefaultConfigurationIfUserFileNotFound() {

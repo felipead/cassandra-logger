@@ -21,9 +21,9 @@ public class LoggerTrigger implements ITrigger {
     private LogMutationBuilder mutationBuilder;
     
     public LoggerTrigger() {
-        Settings config = SettingsProvider.getSettings();
+        Settings settings = SettingsProvider.getSettings();
         mutationBuilder = new LogMutationBuilder(
-                config.getLogKeyspace(), config.getLogColumnFamily());
+                settings.getLogKeyspace(), settings.getLogColumnFamily());
     }
     
     public Collection<Mutation> augment(ByteBuffer key, ColumnFamily update) {

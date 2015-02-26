@@ -23,17 +23,17 @@ public class SettingsProvider {
     private static Settings loadConfiguration() {
         try {
             Settings settings = SettingsLoader.load(USER_SETTINGS_FILE);
-            LOGGER.info(String.format("Loaded settings from file %s.", USER_SETTINGS_FILE));
+            LOGGER.info("Loaded settings from file {}.", USER_SETTINGS_FILE);
             return settings;
         } catch (IOException e) {
-            LOGGER.warn(String.format("Settings file %s not found at the classpath.", USER_SETTINGS_FILE));
+            LOGGER.warn("Settings file {} not found at the classpath.", USER_SETTINGS_FILE);
         }
         
         LOGGER.info("Loading default settings.");
         try {
             return SettingsLoader.load(DEFAULT_SETTINGS_FILE);
         } catch (IOException e) {
-            LOGGER.error(String.format("Could not load default settings from %s. Abort.", DEFAULT_SETTINGS_FILE));
+            LOGGER.error("Could not load default settings from {}. Abort.", DEFAULT_SETTINGS_FILE);
             throw new RuntimeException(e);
         }
     }
