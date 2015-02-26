@@ -15,7 +15,7 @@ Setup
 
 ### Installing the JDK
 
-Please follow the instructions from the Oracle [website](http://docs.oracle.com/javase/7/docs/webnotes/install/)
+You need a Java JDK 7 or 8. Please follow the instructions from the Oracle [website](http://docs.oracle.com/javase/7/docs/webnotes/install/)
 
 ### Installing Cassandra
 
@@ -28,8 +28,6 @@ Please follow the instructions from the Cassandra project [website](http://wiki.
 Gradle is a build tool for Java, a simplified successor to the well stablished Maven.
 
 Please follow the instructions from the Gradle project [website](http://gradle.org/installation).
-
-You need to have Java Development Kit installed 
 
 ### Building the JAR
 
