@@ -51,6 +51,24 @@ You should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
 
         INFO  [...] 2015-02-26 12:51:09,933 CustomClassLoader.java:87 - Loading new jar /.../apache-cassandra-2.1.3/conf/triggers/cassandra-logger-0.1.jar
 
+### Create the Log Table
+
+By default, the Log table will have the keyspace `logger` and column family `log`. The logger trigger needs both to be created beforehand, otherwise it will fail.
+
+Open the CQL terminal (`{CASSANDRA_HOME}/bin/cqlsh`) and run:
+
+        CREATE KEYSPACE logger;
+        USE logger;
+        
+        CREATE TABLE log (
+            id timeuuid PRIMARY KEY,
+            keyspace text,
+            column_family text,
+            key text,
+            column_name text,
+            operation text,
+            time timestamp
+        ) WITH CLUSTERING ORDER BY (time desc);
 
 ### Create Triggers
 
