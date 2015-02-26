@@ -1,22 +1,25 @@
 package org.apache.cassandra.logger;
 
+import org.apache.cassandra.config.CFMetaData;
+import org.apache.cassandra.db.Cell;
 import org.apache.cassandra.db.ColumnFamily;
 import org.apache.cassandra.db.Mutation;
 import org.apache.cassandra.logger.settings.Settings;
 import org.apache.cassandra.logger.settings.SettingsProvider;
 import org.apache.cassandra.triggers.ITrigger;
+import org.apache.cassandra.utils.UUIDGen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.UUID;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
 public class LoggerTrigger implements ITrigger {
-    
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoggerTrigger.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoggerTrigger.class);
 
     private LogMutationBuilder mutationBuilder;
     
@@ -27,22 +30,50 @@ public class LoggerTrigger implements ITrigger {
     }
     
     public Collection<Mutation> augment(ByteBuffer key, ColumnFamily update) {
-        String keyspaceBeingUpdated = update.metadata().ksName;
-        String columnFamilyBeingUpdated = update.metadata().cfName;
+        CFMetaData metadata = update.metadata();
+        String keyspace = metadata.ksName;
+        String columnFamily = metadata.cfName;
+        String keyText = metadata.getKeyValidator().getString(key);
+        
+        try {
+            LogEntry logEntry = buildLogEntry(update, metadata, keyspace, columnFamily, keyText);
+            logger.info("Processing log entry: {}", logEntry);
+            
+            Mutation mutation = mutationBuilder.build(logEntry);
+            logger.info("Built mutation: {}", mutation);
 
+            // FIXME: return mutation that was just built
+        } catch (Exception e) {
+            logger.error("Exception while processing keyspace {}, column family {}, key {}: {}",
+                    keyspace, columnFamily, keyText, e.getMessage());
+        }
+
+        return Collections.emptyList();
+    }
+
+    private LogEntry buildLogEntry(ColumnFamily update, CFMetaData metadata, String keyspace, String columnFamily, String keyText) {
         LogEntry logEntry = new LogEntry();
-        logEntry.setKey(UUID.randomUUID());
-        logEntry.setTargetKeyspace(keyspaceBeingUpdated);
-        logEntry.setTargetColumnFamily(columnFamilyBeingUpdated);
-        logEntry.setTargetPartitionKey(key);
+        logEntry.setId(UUIDGen.getTimeUUID());
+
+        logEntry.setKeyspace(keyspace);
+        logEntry.setColumnFamily(columnFamily);
+        logEntry.setRowKey(keyText);
+
         if (update.isMarkedForDelete()) {
             logEntry.setOperationType(OperationType.DELETE);
         } else {
             logEntry.setOperationType(OperationType.SAVE);
         }
-        logEntry.setOperationTimestamp(System.currentTimeMillis());
-        
-        Mutation mutation = mutationBuilder.build(logEntry);
-        return Arrays.asList(mutation);
+
+        List<String> cellNames = new LinkedList<>();
+        for (Cell cell : update) {
+            if (cell.value().remaining() > 0) {
+                cellNames.add(metadata.comparator.getString(cell.name()));
+            }
+        }
+        logEntry.setColumnNames(cellNames);
+
+        logEntry.setTimestamp(System.currentTimeMillis());
+        return logEntry;
     }
 }
