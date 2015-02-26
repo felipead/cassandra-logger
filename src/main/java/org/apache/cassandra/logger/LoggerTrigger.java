@@ -39,8 +39,7 @@ public class LoggerTrigger implements ITrigger {
             logger.info("Processing log entry: {}", logEntry);
             
             Mutation mutation = mutationBuilder.build(logEntry);
-            logger.info("Adding mutation: {}", mutation);
-            
+
             return Arrays.asList(mutation);
         } catch (Exception e) {
             logger.error("Exception while processing keyspace {}, column family {}, key {}:",
