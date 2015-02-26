@@ -43,6 +43,8 @@ Copy the JAR to `{CASSANDRA_HOME}/conf/triggers`:
 
     cp build/libs/cassandra-logger-0.1.jar {CASSANDRA_HOME}/conf/triggers
 
+### Installing the Trigger
+
 
 Running Automated Tests
 -----------------------
