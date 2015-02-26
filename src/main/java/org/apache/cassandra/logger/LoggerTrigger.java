@@ -2,8 +2,8 @@ package org.apache.cassandra.logger;
 
 import org.apache.cassandra.db.ColumnFamily;
 import org.apache.cassandra.db.Mutation;
-import org.apache.cassandra.logger.configuration.Configuration;
-import org.apache.cassandra.logger.configuration.ConfigurationSingleton;
+import org.apache.cassandra.logger.settings.Settings;
+import org.apache.cassandra.logger.settings.SettingsProvider;
 import org.apache.cassandra.triggers.ITrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class LoggerTrigger implements ITrigger {
     private LogMutationBuilder mutationBuilder;
     
     public LoggerTrigger() {
-        Configuration config = ConfigurationSingleton.getInstance();
+        Settings config = SettingsProvider.getSettings();
         mutationBuilder = new LogMutationBuilder(
                 config.getLogKeyspace(), config.getLogColumnFamily());
     }

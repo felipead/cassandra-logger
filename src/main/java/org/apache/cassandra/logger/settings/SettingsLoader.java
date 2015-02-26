@@ -1,4 +1,4 @@
-package org.apache.cassandra.logger.configuration;
+package org.apache.cassandra.logger.settings;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -7,24 +7,24 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class ConfigurationLoader {
+public class SettingsLoader {
 
     private static final String DEFAULT_LOG_KEYSPACE = "logger";
     private static final String DEFAULT_LOG_COLUMN_FAMILY = "log";
     
-    public static Configuration load(String fileName) throws IOException {
+    public static Settings load(String fileName) throws IOException {
         Properties properties = loadPropertiesFromClassPath(fileName);
         
-        Configuration config = new Configuration();
-        config.setLogKeyspace(StringUtils.strip(properties.getProperty("logKeyspace", DEFAULT_LOG_KEYSPACE)));
-        config.setLogColumnFamily(StringUtils.strip(properties.getProperty("logColumnFamily", DEFAULT_LOG_COLUMN_FAMILY)));
-        return config;
+        Settings settings = new Settings();
+        settings.setLogKeyspace(StringUtils.strip(properties.getProperty("logKeyspace", DEFAULT_LOG_KEYSPACE)));
+        settings.setLogColumnFamily(StringUtils.strip(properties.getProperty("logColumnFamily", DEFAULT_LOG_COLUMN_FAMILY)));
+        return settings;
     }
 
     private static Properties loadPropertiesFromClassPath(String fileName) throws IOException {
         Properties properties = new Properties();
         
-        try (InputStream stream = ConfigurationLoader.class.getClassLoader().getResourceAsStream(fileName)) {
+        try (InputStream stream = SettingsLoader.class.getClassLoader().getResourceAsStream(fileName)) {
             if (stream != null) {
                 properties.load(stream);
             } else {

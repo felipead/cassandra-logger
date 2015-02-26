@@ -1,6 +1,6 @@
-package org.apache.cassandra.logger.configuration;
+package org.apache.cassandra.logger.settings;
 
-public class Configuration {
+public class Settings {
 
     private String logKeyspace;
     private String logColumnFamily;    
