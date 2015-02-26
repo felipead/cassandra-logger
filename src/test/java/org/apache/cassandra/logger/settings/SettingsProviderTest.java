@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.is;
 public class SettingsProviderTest {
     
     @Test
-    public void loadDefaultConfigurationIfUserFileNotFound() {
+    public void loadDefaultSettingsIfUserSettingsFileNotFound() {
         Settings settings = SettingsProvider.getSettings();
         assertThat(settings.getLogKeyspace(), is("logger"));
         assertThat(settings.getLogColumnFamily(), is("log"));

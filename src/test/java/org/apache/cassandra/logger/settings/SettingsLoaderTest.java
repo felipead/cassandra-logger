@@ -31,7 +31,7 @@ public class SettingsLoaderTest {
     }
     
     @Test(expected = IOException.class)
-    public void failIfNoPropertiesFileFound() throws IOException {
+    public void failIfNoSettingsFileFound() throws IOException {
         SettingsLoader.load("Nonexistent.properties");
     }
 }
