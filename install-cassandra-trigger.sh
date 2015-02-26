@@ -13,12 +13,17 @@ then
 	exit 1
 fi
 
+triggers_dir="$cassandra_home/conf/triggers"
+if [ ! -d $triggers_dir ]
+then 
+	echo "Triggers directory does not exist ($triggers_dir)."
+	echo "Are you sure this is a valid Cassandra 2.1+ installation?"
+	exit 1
+fi
+
 echo "Compiling jar with Gradle..."
 if gradle clean assemble -q
 then
-	triggers_dir="$cassandra_home/conf/triggers"
-	mkdir -p $triggers_dir	
-
 	echo "Uninstalling old jar versions..."
 	rm -f "$triggers_dir/cassandra-logger*.jar"
 	
