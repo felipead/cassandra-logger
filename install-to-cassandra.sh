@@ -25,8 +25,22 @@ then
 	echo "Copying jar into Cassandra triggers directory..."
 	cp build/libs/cassandra-logger*.jar $triggers_dir
 
-	echo "Asking Cassandra to reload triggers..."
-	$cassandra_home/bin/nodetool -h localhost reloadtriggers
+	user=`whoami`
+	cassandra_pid=`pgrep -u $user -f cassandra`
+	if [ $cassandra_pid ]
+	then
+		echo "Cassandra is running with PID $cassandra_pid."
+		echo "Reloading triggers..."
+		if $cassandra_home/bin/nodetool -h localhost reloadtriggers
+		then
+			echo "Trigger installed and loaded successfuly. You can already use it on the CQL sheel."
+		else
+			echo "Something went wrong. Could not reload triggers."
+		fi
+	else
+		echo "Cassandra is not running. You can start it with $cassandra_home/bin/cassandra."
+		echo "The trigger was successfully installed nevertheless."
+	fi
 else
     echo "Error: Gradle build failed."
     exit 1
