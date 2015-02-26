@@ -9,7 +9,7 @@ fi
 cassandra_home=$1
 if [ ! -d $cassandra_home ]
 then
-	echo "Error: directory does not exist - $cassandra_home"
+	echo "Directory does not exist - $cassandra_home"
 	exit 1
 fi
 
@@ -18,6 +18,12 @@ if [ ! -d $triggers_dir ]
 then 
 	echo "Triggers directory does not exist ($triggers_dir)."
 	echo "Are you sure this is a valid Cassandra 2.1+ installation?"
+	exit 1
+fi
+
+if ! type "gradle" > /dev/null
+then
+	echo "Gradle command was not found. Make sure it is installed and available in the PATH."
 	exit 1
 fi
 
@@ -47,7 +53,6 @@ then
 		echo "The trigger was successfully installed nevertheless."
 	fi
 else
-    echo "Error: Gradle build failed."
-    echo "Check if gradle is correctly installed and try to run 'gradle assemble' manually and see what happens."
+    echo "Gradle build failed. Aborted."
     exit 1
 fi
