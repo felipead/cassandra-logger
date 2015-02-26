@@ -35,16 +35,31 @@ Please follow the instructions from the Gradle project [website](http://gradle.o
 
 Enter the project root folder and type:
 
-    gradle assemble
+        gradle assemble
 
 If the compilation is successful, the resulting JAR will be available at `build/libs/cassandra-logger-<version>.jar`.
 
 Copy the JAR to `{CASSANDRA_HOME}/conf/triggers`:
 
-    cp build/libs/cassandra-logger-0.1.jar {CASSANDRA_HOME}/conf/triggers
+        cp build/libs/cassandra-logger-0.1.jar {CASSANDRA_HOME}/conf/triggers
 
-### Installing the Trigger
+Restart the cluster or tell Cassandra to reload the triggers:
 
+        nodetool -h localhost reloadtriggers
+
+### Create Triggers
+
+For each column family you want to log, you need to create a trigger using the following CQL statement:
+
+        CREATE TRIGGER <trigger_name> ON <table> USING 'org.apache.cassandra.logger.LoggerTrigger';
+
+For instance:
+
+        CREATE TRIGGER product_logger ON product USING 'org.apache.cassandra.logger.LoggerTrigger';
+
+If you want to disable this trigger, you can use:
+
+        DROP TRIGGER product_logger ON product;
 
 Running Automated Tests
 -----------------------
