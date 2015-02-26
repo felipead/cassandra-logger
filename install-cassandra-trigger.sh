@@ -48,5 +48,6 @@ then
 	fi
 else
     echo "Error: Gradle build failed."
+    echo "Check if gradle is correctly installed and try to run 'gradle assemble' manually and see what happens."
     exit 1
 fi
