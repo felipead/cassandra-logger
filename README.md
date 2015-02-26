@@ -43,9 +43,14 @@ Copy the JAR to `{CASSANDRA_HOME}/conf/triggers`:
 
         cp build/libs/cassandra-logger-0.1.jar {CASSANDRA_HOME}/conf/triggers
 
-Restart the cluster or tell Cassandra to reload the triggers:
+Restart Cassandra or tell it to reload the triggers:
 
         nodetool -h localhost reloadtriggers
+
+You should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
+
+        INFO  [...] 2015-02-26 12:51:09,933 CustomClassLoader.java:87 - Loading new jar /.../apache-cassandra-2.1.3/conf/triggers/cassandra-logger-0.1.jar
+
 
 ### Create Triggers
 
