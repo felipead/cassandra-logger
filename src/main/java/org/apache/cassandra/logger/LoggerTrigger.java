@@ -15,14 +15,14 @@ import java.util.Collection;
 import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
-public class LogTrigger implements ITrigger {
+public class LoggerTrigger implements ITrigger {
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(LogTrigger.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoggerTrigger.class);
 
     private LogMutationBuilder mutationBuilder;
     private Configuration configuration;
     
-    public LogTrigger() {
+    public LoggerTrigger() {
         configuration = ConfigurationSingleton.getInstance();
         mutationBuilder = new LogMutationBuilder(
                 configuration.getLogKeyspace(), configuration.getLogColumnFamily());
