@@ -45,7 +45,7 @@ Copy the JAR to `{CASSANDRA_HOME}/conf/triggers`:
 
 Start Cassandra (`{CASSANDRA_HOME}/bin/cassandra`) or tell it to reload the triggers:
 
-        nodetool -h localhost reloadtriggers
+        {CASSANDRA_HOME}/bin/nodetool -h localhost reloadtriggers
 
 You should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
 
