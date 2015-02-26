@@ -5,34 +5,28 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 
 public class ConfigurationLoaderTest {
     
     @Test
-    public void loadDisabledLoggingConfiguration() throws IOException {
-        Configuration configuration = ConfigurationLoader.load("src/test/resources/org/apache/cassandra/logger/configuration/Disabled.properties");
-        assertThat(configuration.getLoggingMode(), is(LoggingMode.DISABLED));
-        assertThat(configuration.getKeyspacesToLog(), is(empty()));
+    public void loadValidConfiguration() throws IOException {
+        Configuration configuration = ConfigurationLoader.load("org/apache/cassandra/logger/configuration/ValidConfiguration.properties");
         assertThat(configuration.getLogKeyspace(), is("test_logger"));
         assertThat(configuration.getLogColumnFamily(), is("test_log"));
     }
 
     @Test
-    public void loadLogAllKeyspacesConfiguration() throws IOException {
-        Configuration configuration = ConfigurationLoader.load("src/test/resources/org/apache/cassandra/logger/configuration/LogAllKeyspaces.properties");
-        assertThat(configuration.getLoggingMode(), is(LoggingMode.ALL_KEYSPACES));
-        assertThat(configuration.getKeyspacesToLog(), is(empty()));
+    public void useDefaultLogColumnFamilyIfNotProvidedInConfigurationFile() throws IOException {
+        Configuration configuration = ConfigurationLoader.load("org/apache/cassandra/logger/configuration/ConfigurationWithoutLogColumnFamily.properties");
         assertThat(configuration.getLogKeyspace(), is("test_logger"));
-        assertThat(configuration.getLogColumnFamily(), is("test_log"));
+        assertThat(configuration.getLogColumnFamily(), is("log"));
     }
 
     @Test
-    public void loadLogOnlySpecifiedKeyspacesConfiguration() throws IOException {
-        Configuration configuration = ConfigurationLoader.load("src/test/resources/org/apache/cassandra/logger/configuration/LogOnlySpecifiedKeyspaces.properties");
-        assertThat(configuration.getLoggingMode(), is(LoggingMode.ONLY_SPECIFIED_KEYSPACES));
-        assertThat(configuration.getKeyspacesToLog(), containsInAnyOrder("products", "users", "items", "orders"));
-        assertThat(configuration.getLogKeyspace(), is("test_logger"));
+    public void useDefaultLogKeyspaceIfNotProvidedInConfigurationFile() throws IOException {
+        Configuration configuration = ConfigurationLoader.load("org/apache/cassandra/logger/configuration/ConfigurationWithoutLogKeyspace.properties");
+        assertThat(configuration.getLogKeyspace(), is("logger"));
         assertThat(configuration.getLogColumnFamily(), is("test_log"));
     }
     

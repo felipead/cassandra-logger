@@ -4,7 +4,6 @@ import org.apache.cassandra.db.ColumnFamily;
 import org.apache.cassandra.db.Mutation;
 import org.apache.cassandra.logger.configuration.Configuration;
 import org.apache.cassandra.logger.configuration.ConfigurationSingleton;
-import org.apache.cassandra.logger.configuration.LoggingMode;
 import org.apache.cassandra.triggers.ITrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,27 +19,17 @@ public class LoggerTrigger implements ITrigger {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggerTrigger.class);
 
     private LogMutationBuilder mutationBuilder;
-    private Configuration configuration;
     
     public LoggerTrigger() {
-        configuration = ConfigurationSingleton.getInstance();
+        Configuration config = ConfigurationSingleton.getInstance();
         mutationBuilder = new LogMutationBuilder(
-                configuration.getLogKeyspace(), configuration.getLogColumnFamily());
+                config.getLogKeyspace(), config.getLogColumnFamily());
     }
     
     public Collection<Mutation> augment(ByteBuffer key, ColumnFamily update) {
-        if (configuration.getLoggingMode() == LoggingMode.DISABLED) {
-            return null;
-        }
-        
         String keyspaceBeingUpdated = update.metadata().ksName;
         String columnFamilyBeingUpdated = update.metadata().cfName;
 
-        if (configuration.getLoggingMode() == LoggingMode.ONLY_SPECIFIED_KEYSPACES &&
-                !configuration.getKeyspacesToLog().contains(keyspaceBeingUpdated)) {
-            return null;
-        }
-        
         LogEntry logEntry = new LogEntry();
         logEntry.setKey(UUID.randomUUID());
         logEntry.setTargetKeyspace(keyspaceBeingUpdated);
