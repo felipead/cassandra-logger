@@ -25,6 +25,8 @@ public class LoggerTrigger implements ITrigger {
     
     public LoggerTrigger() {
         Settings settings = SettingsProvider.getSettings();
+        logger.info("using settings: {}", settings);
+        
         mutationBuilder = new LogMutationBuilder(
                 settings.getLogKeyspace(), settings.getLogColumnFamily());
     }
@@ -44,8 +46,8 @@ public class LoggerTrigger implements ITrigger {
 
             // FIXME: return mutation that was just built
         } catch (Exception e) {
-            logger.error("Exception while processing keyspace {}, column family {}, key {}: {}",
-                    keyspace, columnFamily, keyText, e.getMessage());
+            logger.error("Exception while processing keyspace {}, column family {}, key {}:",
+                    keyspace, columnFamily, keyText, e);
         }
 
         return Collections.emptyList();
@@ -55,8 +57,8 @@ public class LoggerTrigger implements ITrigger {
         LogEntry logEntry = new LogEntry();
         logEntry.setId(UUIDGen.getTimeUUID());
 
-        logEntry.setKeyspace(keyspace);
-        logEntry.setColumnFamily(columnFamily);
+        logEntry.setKeyspaceName(keyspace);
+        logEntry.setColumnFamilyName(columnFamily);
         logEntry.setRowKey(keyText);
 
         if (update.isMarkedForDelete()) {

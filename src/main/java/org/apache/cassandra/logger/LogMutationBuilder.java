@@ -11,7 +11,7 @@ import java.util.Collection;
 import static org.apache.cassandra.utils.ByteBufferUtil.bytes;
 
 public class LogMutationBuilder {
-    
+
     private String keyspace;
     private String columnFamily;
     
@@ -23,8 +23,8 @@ public class LogMutationBuilder {
     public Mutation build(LogEntry logEntry) {
         long timestamp = System.currentTimeMillis();
         Mutation mutation = new Mutation(keyspace, bytes(logEntry.getId()));
-        mutation.add(columnFamily, toCellName("keyspace"), bytes(logEntry.getKeyspace()), timestamp);
-        mutation.add(columnFamily, toCellName("column_family"), bytes(logEntry.getColumnFamily()), timestamp);
+        mutation.add(columnFamily, toCellName("keyspace_name"), bytes(logEntry.getKeyspaceName()), timestamp);
+        mutation.add(columnFamily, toCellName("column_family_name"), bytes(logEntry.getColumnFamilyName()), timestamp);
         mutation.add(columnFamily, toCellName("key"), bytes(logEntry.getRowKey()), timestamp);
         mutation.add(columnFamily, toCellName("column_names"), bytes(toCommaSeparatedString(logEntry.getColumnNames())), timestamp);
         mutation.add(columnFamily, toCellName("operation_type"), bytes(logEntry.getOperationType().getValue()), timestamp);

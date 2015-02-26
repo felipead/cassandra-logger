@@ -8,8 +8,8 @@ import java.util.UUID;
 public class LogEntry {
     
     private UUID id;
-    private String keyspace;
-    private String columnFamily;
+    private String keyspaceName;
+    private String columnFamilyName;
     private String rowKey;
     private List<String> columnNames;
     private OperationType operationType;
@@ -23,20 +23,20 @@ public class LogEntry {
         this.id = id;
     }
 
-    public String getKeyspace() {
-        return keyspace;
+    public String getKeyspaceName() {
+        return keyspaceName;
     }
     
-    public void setKeyspace(String keyspace) {
-        this.keyspace = keyspace;
+    public void setKeyspaceName(String keyspaceName) {
+        this.keyspaceName = keyspaceName;
     }
 
-    public String getColumnFamily() {
-        return columnFamily;
+    public String getColumnFamilyName() {
+        return columnFamilyName;
     }
     
-    public void setColumnFamily(String columnFamily) {
-        this.columnFamily = columnFamily;
+    public void setColumnFamilyName(String columnFamilyName) {
+        this.columnFamilyName = columnFamilyName;
     }
 
     public String getRowKey() {
@@ -74,13 +74,13 @@ public class LogEntry {
     @Override
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this);
-        builder.append("id", id);
-        builder.append("keyspace", keyspace);
-        builder.append("columnFamily", columnFamily);
-        builder.append("rowKey", rowKey);
-        builder.append("columnNames", columnNames);
-        builder.append("operationType", operationType);
-        builder.append("timestamp", timestamp);
+        builder.append("id", getId());
+        builder.append("keyspace", getKeyspaceName());
+        builder.append("columnFamilyName", getColumnFamilyName());
+        builder.append("rowKey", getRowKey());
+        builder.append("columnNames", getColumnNames());
+        builder.append("operationType", getOperationType());
+        builder.append("timestamp", getTimestamp());
         return builder.build();
     }
 }
