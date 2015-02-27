@@ -5,7 +5,9 @@ import org.apache.cassandra.db.Cell;
 import org.apache.cassandra.db.ColumnFamily;
 import org.apache.cassandra.logger.log.LogEntry;
 import org.apache.cassandra.logger.log.Operation;
+import org.apache.cassandra.utils.UUIDGen;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -34,11 +36,11 @@ public class LogEntryBuilder {
         }
         logEntry.setUpdatedColumns(cellNames);
 
-        logEntry.setTimestamp(System.currentTimeMillis());
+        logEntry.setTime(new Date());
         return logEntry;
     }
 
     private static UUID generateUUID() {
-        return UUID.randomUUID();
+        return UUIDGen.getTimeUUID();
     }
 }

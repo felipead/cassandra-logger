@@ -16,13 +16,11 @@ USE logger;
 DROP TABLE IF EXISTS log;
 
 CREATE TABLE log (
-    id uuid,
+    id timeuuid PRIMARY KEY,
+    time timestamp,
     logged_keyspace text,
     logged_table text,
     logged_key text,
     updated_columns text,
-    operation text,
-    host text,
-    timestamp timestamp,
-    PRIMARY KEY (id, timestamp)
-) WITH CLUSTERING ORDER BY (timestamp DESC);
+    operation text
+);

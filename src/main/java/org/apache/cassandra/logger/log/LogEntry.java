@@ -2,6 +2,7 @@ package org.apache.cassandra.logger.log;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ public class LogEntry {
     private String loggedKey;
     private List<String> updatedColumns;
     private Operation operation;
-    private long timestamp;
+    private Date time;
 
     public UUID getId() {
         return id;
@@ -63,24 +64,24 @@ public class LogEntry {
         this.updatedColumns = updatedColumns;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public Date getTime() {
+        return time;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setTime(Date time) {
+        this.time = time;
     }
     
     @Override
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this);
         builder.append("id", getId());
-        builder.append("keyspace", getLoggedKeyspace());
+        builder.append("loggedKeyspace", getLoggedKeyspace());
         builder.append("loggedTable", getLoggedTable());
         builder.append("loggedKey", getLoggedKey());
         builder.append("updatedColumns", getUpdatedColumns());
         builder.append("operation", getOperation());
-        builder.append("timestamp", getTimestamp());
+        builder.append("time", getTime());
         return builder.build();
     }
 }

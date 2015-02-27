@@ -26,10 +26,7 @@ public class LoggerTrigger implements ITrigger {
     
     public LoggerTrigger() {
         Settings settings = SettingsProvider.getSettings();
-        logger.info("using settings: {}", settings);
-        
         logEntryBuilder = new LogEntryBuilder();
-        
         logMutationBuilder = new LogMutationBuilder(
                 settings.getLogKeyspace(), settings.getLogTable());
     }

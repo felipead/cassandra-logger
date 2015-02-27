@@ -2,7 +2,7 @@ package org.apache.cassandra.logger.log;
 
 public enum Operation {
     SAVE("save"),
-    DELETE("del");
+    DELETE("delete");
     
     private final String value;
 
