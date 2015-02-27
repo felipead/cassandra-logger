@@ -1,7 +1,7 @@
 Cassandra Logger
 ================
 
-[Trigger](http://www.datastax.com/dev/blog/whats-new-in-cassandra-2-0-prototype-triggers-support) for [Apache Cassandra](http://cassandra.apache.org) that keeps a log of all updates in a set of tables. Useful to sync Cassandra with other databases, like Solr or Elastic Search.
+[Trigger](http://www.datastax.com/dev/blog/whats-new-in-cassandra-2-0-prototype-triggers-support) for [Apache Cassandra](http://cassandra.apache.org) that keepscolu a log of all updates in a set of tables. Useful to sync Cassandra with other databases, like Solr or Elastic Search.
 
 *Version: 0.1 (Not ready for production, API may change)*
 
@@ -65,7 +65,7 @@ To make sure it was created correctly, enter CQL shell and run:
 
 ### Create Triggers
 
-For each column family you want to log, you need to create a trigger using the following CQL statement:
+For each table you want to log, you need to create a trigger using the following CQL statement:
 
         CREATE TRIGGER <trigger_name> ON <table> USING 'org.apache.cassandra.logger.LoggerTrigger';
 
