@@ -2,7 +2,8 @@
 
 set -e
 
-jar_name="cassandra-logger*.jar"
+jar_file="cassandra-logger*.jar"
+settings_file="cassandra-logger.properties"
 gradle_build_dir="build/libs"
 
 if [ ! $1 ]; then
@@ -10,15 +11,16 @@ if [ ! $1 ]; then
 	exit 1
 fi
 
-cassandra_home=$1
-if [ ! -d ${cassandra_home} ]; then
-	echo "Directory does not exist - $cassandra_home"
+cassandra_dir=${1%/}
+if [ ! -d ${cassandra_dir} ]; then
+	echo "Directory does not exist - ${cassandra_dir}"
 	exit 1
 fi
 
-triggers_dir="${cassandra_home}/conf/triggers"
-if [ ! -d ${triggers_dir} ]; then
-	echo "Triggers directory does not exist ($triggers_dir)."
+cassandra_conf_dir=${cassandra_dir}/conf
+cassandra_triggers_dir=${cassandra_conf_dir}/triggers
+if [ ! -d ${cassandra_triggers_dir} ]; then
+	echo "Triggers directory does not exist ($cassandra_triggers_dir)."
 	echo "Are you sure this is a valid Cassandra 2.1+ installation?"
 	exit 1
 fi
@@ -32,10 +34,15 @@ echo "Building jar with Gradle..."
 gradle clean assemble -q
 
 echo "Uninstalling old jar versions..."
-rm -f ${triggers_dir}/${jar_name}
+rm -f ${cassandra_triggers_dir}/${jar_file}
 
-echo "Copying new jar into Cassandra triggers directory..."
-cp ${gradle_build_dir}/${jar_name}  ${triggers_dir}
+echo "Copying new jar into ${cassandra_triggers_dir}..."
+cp ${gradle_build_dir}/${jar_file}  ${cassandra_triggers_dir}
+
+if [ ! -f ${cassandra_conf_dir}/${settings_file} ]; then
+    echo "Copying settings file ${settings_file} to ${cassandra_conf_dir}..."
+    cp config/${settings_file} ${cassandra_conf_dir}
+fi
 
 echo "The trigger was successfully installed."
 
@@ -44,7 +51,7 @@ cassandra_pid=`pgrep -u ${user} -f cassandra`
 
 if [ ${cassandra_pid} ]; then
     echo "Cassandra is running for current user with PID ${cassandra_pid}. Atempting to reload triggers..."
-    if ${cassandra_home}/bin/nodetool -h localhost reloadtriggers; then
+    if ${cassandra_dir}/bin/nodetool -h localhost reloadtriggers; then
         echo "Trigger loaded successfuly. You can already use it on the CQL sheel."
     else
         echo "Something went wrong. Could not reload triggers. Try restarting Cassandra manually."
