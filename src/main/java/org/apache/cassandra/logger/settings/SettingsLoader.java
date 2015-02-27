@@ -10,14 +10,14 @@ import java.util.Properties;
 public class SettingsLoader {
 
     private static final String DEFAULT_LOG_KEYSPACE = "logger";
-    private static final String DEFAULT_LOG_COLUMN_FAMILY = "log";
+    private static final String DEFAULT_LOG_TABLE = "log";
     
     public static Settings load(String fileName) throws IOException {
         Properties properties = loadPropertiesFromClassPath(fileName);
         
         Settings settings = new Settings();
         settings.setLogKeyspace(StringUtils.strip(properties.getProperty("logKeyspace", DEFAULT_LOG_KEYSPACE)));
-        settings.setLogColumnFamily(StringUtils.strip(properties.getProperty("logColumnFamily", DEFAULT_LOG_COLUMN_FAMILY)));
+        settings.setLogTable(StringUtils.strip(properties.getProperty("logTable", DEFAULT_LOG_TABLE)));
         return settings;
     }
 

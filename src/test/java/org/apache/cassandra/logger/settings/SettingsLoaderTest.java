@@ -13,21 +13,21 @@ public class SettingsLoaderTest {
     public void loadValidSettings() throws IOException {
         Settings settings = SettingsLoader.load("org/apache/cassandra/logger/settings/ValidSettings.properties");
         assertThat(settings.getLogKeyspace(), is("test_logger"));
-        assertThat(settings.getLogColumnFamily(), is("test_log"));
+        assertThat(settings.getLogTable(), is("test_log"));
     }
 
     @Test
-    public void useDefaultLogColumnFamilyIfNotProvidedInSettingsFile() throws IOException {
-        Settings settings = SettingsLoader.load("org/apache/cassandra/logger/settings/SettingsWithoutLogColumnFamily.properties");
+    public void useDefaultLogTableIfNotProvidedInSettingsFile() throws IOException {
+        Settings settings = SettingsLoader.load("org/apache/cassandra/logger/settings/SettingsWithoutLogTable.properties");
         assertThat(settings.getLogKeyspace(), is("test_logger"));
-        assertThat(settings.getLogColumnFamily(), is("log"));
+        assertThat(settings.getLogTable(), is("log"));
     }
 
     @Test
     public void useDefaultLogKeyspaceIfNotProvidedInSettingsFile() throws IOException {
         Settings settings = SettingsLoader.load("org/apache/cassandra/logger/settings/SettingsWithoutLogKeyspace.properties");
         assertThat(settings.getLogKeyspace(), is("logger"));
-        assertThat(settings.getLogColumnFamily(), is("test_log"));
+        assertThat(settings.getLogTable(), is("test_log"));
     }
     
     @Test(expected = IOException.class)

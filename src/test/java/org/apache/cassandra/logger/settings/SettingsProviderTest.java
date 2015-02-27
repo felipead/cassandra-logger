@@ -11,6 +11,6 @@ public class SettingsProviderTest {
     public void loadDefaultSettingsIfUserSettingsFileNotFound() {
         Settings settings = SettingsProvider.getSettings();
         assertThat(settings.getLogKeyspace(), is("logger"));
-        assertThat(settings.getLogColumnFamily(), is("log"));
+        assertThat(settings.getLogTable(), is("log"));
     }
 }
