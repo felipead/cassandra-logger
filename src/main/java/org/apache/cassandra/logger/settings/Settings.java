@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Settings {
 
     private String logKeyspace;
-    private String logColumnFamily;    
+    private String logTable;
 
     public String getLogKeyspace() {
         return logKeyspace;
@@ -15,19 +15,19 @@ public class Settings {
         this.logKeyspace = logKeyspace;
     }
 
-    public String getLogColumnFamily() {
-        return logColumnFamily;
+    public String getLogTable() {
+        return logTable;
     }
 
-    public void setLogColumnFamily(String logColumnFamily) {
-        this.logColumnFamily = logColumnFamily;
+    public void setLogTable(String logTable) {
+        this.logTable = logTable;
     }
     
     @Override
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this);
         builder.append("logKeyspace", getLogKeyspace());
-        builder.append("logColumnFamily", getLogColumnFamily());
+        builder.append("logTable", getLogTable());
         return builder.build();
     }
 }
