@@ -5,7 +5,7 @@ import org.apache.cassandra.db.Mutation;
 import org.apache.cassandra.db.composites.CellName;
 import org.apache.cassandra.db.composites.CellNames;
 import org.apache.cassandra.db.marshal.TimestampType;
-import org.apache.cassandra.db.marshal.UTF8Type;
+import org.apache.cassandra.db.marshal.AsciiType;
 import org.apache.cassandra.db.marshal.UUIDType;
 import org.apache.cassandra.logger.log.LogEntry;
 import org.apache.commons.lang3.StringUtils;
@@ -27,13 +27,13 @@ public class LogMutationBuilder {
         long timestamp = new Date().getTime();
         
         Mutation mutation = new Mutation(keyspace, UUIDType.instance.decompose(logEntry.getId()));
-        
+
         mutation.add(columnFamily, toCellName("time"), TimestampType.instance.decompose(logEntry.getTime()), timestamp);        
-        mutation.add(columnFamily, toCellName("logged_keyspace"), UTF8Type.instance.decompose(logEntry.getLoggedKeyspace()), timestamp);
-        mutation.add(columnFamily, toCellName("logged_table"), UTF8Type.instance.decompose(logEntry.getLoggedTable()), timestamp);
-        mutation.add(columnFamily, toCellName("logged_key"), UTF8Type.instance.decompose(logEntry.getLoggedKey()), timestamp);
-        mutation.add(columnFamily, toCellName("updated_columns"), UTF8Type.instance.decompose(toCommaSeparatedString(logEntry.getUpdatedColumns())), timestamp);
-        mutation.add(columnFamily, toCellName("operation"), UTF8Type.instance.decompose(logEntry.getOperation().getValue()), timestamp);
+        mutation.add(columnFamily, toCellName("logged_keyspace"), AsciiType.instance.decompose(logEntry.getLoggedKeyspace()), timestamp);
+        mutation.add(columnFamily, toCellName("logged_table"), AsciiType.instance.decompose(logEntry.getLoggedTable()), timestamp);
+        mutation.add(columnFamily, toCellName("logged_key"), AsciiType.instance.decompose(logEntry.getLoggedKey()), timestamp);
+        mutation.add(columnFamily, toCellName("updated_columns"), AsciiType.instance.decompose(toCommaSeparatedString(logEntry.getUpdatedColumns())), timestamp);
+        mutation.add(columnFamily, toCellName("operation"), AsciiType.instance.decompose(logEntry.getOperation().getValue()), timestamp);
         
         return mutation;
     }
