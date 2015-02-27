@@ -27,7 +27,7 @@ Please follow the instructions from the Cassandra project [website](http://wiki.
 
 ### Installing Gradle
 
-Gradle is a build tool for Java, a simplified successor to the well stablished Maven.
+Gradle is a build tool for Java, a simplified successor to the well established Maven.
 
 Please follow the instructions from the Gradle project [website](http://gradle.org/installation).
 
@@ -45,11 +45,13 @@ The script [`install-cassandra-trigger.sh`](install-cassandra-trigger.sh) will b
 
         ./install-cassandra-trigger {CASSANDRA_HOME}
 
-where `{CASSANDRA_HOME}` is the root of your Cassandra installation. This directory needs to be writable by your user. Please notice that it will not work for versions of Cassandra prior to 2.1.
+where `{CASSANDRA_HOME}` is the root of your Cassandra installation. This directory needs to be writable by your user. Remember that it will not work for versions of Cassandra prior to 2.1.
 
 If cassandra is already running you should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
 
         INFO  [...] 2015-02-26 12:51:09,933 CustomClassLoader.java:87 - Loading new jar /.../apache-cassandra-2.1.3/conf/triggers/cassandra-logger-0.1.jar
+
+*Please notice that the trigger needs to be installed on every node of your cluster.*
 
 ### Create the Schema
 
