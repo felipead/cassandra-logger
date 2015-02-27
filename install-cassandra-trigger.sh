@@ -49,7 +49,7 @@ echo "The trigger was successfully installed."
 user=`whoami`
 cassandra_pid=`pgrep -u ${user} -f cassandra`
 
-if [ ${cassandra_pid} ]; then
+if [ ! -z "${cassandra_pid}" ]; then
     echo "Cassandra is running for current user with PID ${cassandra_pid}. Atempting to reload triggers..."
     if ${cassandra_dir}/bin/nodetool -h localhost reloadtriggers; then
         echo "Trigger loaded successfuly. You can already use it on the CQL sheel."
@@ -57,8 +57,6 @@ if [ ${cassandra_pid} ]; then
         echo "Something went wrong. Could not reload triggers. Try restarting Cassandra manually."
         exit 1
     fi
-else
-    echo "Cassandra is not running. The trigger will be available next time it starts."
 fi
 
 exit 0
