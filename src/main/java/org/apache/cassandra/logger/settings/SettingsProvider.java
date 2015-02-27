@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class SettingsProvider {
 
-    private static final String USER_SETTINGS_FILE = "logger.properties";
+    private static final String USER_SETTINGS_FILE = "cassandra-logger.properties";
     private static final String DEFAULT_SETTINGS_FILE = "default.properties";
     private static final Logger logger = LoggerFactory.getLogger(SettingsProvider.class);
 
