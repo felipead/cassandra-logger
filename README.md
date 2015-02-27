@@ -63,7 +63,7 @@ Load script [`create-log-schema.cql`](create-log-schema.cql) into CQL shell to c
 
 To make sure it was created correctly, enter CQL shell and run:
 
-        SELECT * FROM logger.log;
+        DESCRIBE TABLE logger.log
 
 ### Create Triggers
 
