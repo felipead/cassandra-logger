@@ -7,7 +7,7 @@
 
 # Gradle
 .gradle/
-build/
+/build/
 
 # Intellij IDEA
 .idea/
