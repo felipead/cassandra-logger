@@ -5,9 +5,7 @@
  *
  * It will create a table "log" on keyspace "logger".
  * If you want to customize these names, you also need to edit cassandra-logger.properties.
- * Feel free to customize the replication and clustering settings to better suit your needs.
  */
-
 CREATE KEYSPACE IF NOT EXISTS logger
 WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
 
