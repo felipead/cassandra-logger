@@ -39,37 +39,29 @@ Enter the project root folder and type:
 
 If the compilation is successful, the resulting JAR will be available at `build/libs`.
 
-Copy the JAR to `{CASSANDRA_HOME}/conf/triggers`:
+### Installing the Trigger
 
-        cp build/libs/cassandra-logger-0.1.jar {CASSANDRA_HOME}/conf/triggers
+The script [`install-cassandra-trigger.sh`](install-cassandra-trigger.sh) will build and install the trigger on Cassandra *automagically*:
 
-Start Cassandra (`{CASSANDRA_HOME}/bin/cassandra`) or tell it to reload the triggers:
+        ./install-cassandra-trigger {CASSANDRA_HOME}
 
-        {CASSANDRA_HOME}/bin/nodetool -h localhost reloadtriggers
+where `{CASSANDRA_HOME}` is the root of your Cassandra installation. This directory needs to be writable by your user. Please notice that it will not work for versions of Cassandra prior to 2.1.
 
-You should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
+If cassandra is already running you should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
 
         INFO  [...] 2015-02-26 12:51:09,933 CustomClassLoader.java:87 - Loading new jar /.../apache-cassandra-2.1.3/conf/triggers/cassandra-logger-0.1.jar
 
-### Create the Log Table
+### Create the Schema
 
-By default, the Log table will have the keyspace `logger` and column family `log`. The logger trigger needs both to be created beforehand, otherwise it will fail.
+By default, the Logger will use table `log` on keyspace `logger`. You need to create this table manually.
 
-Open the CQL shell (`{CASSANDRA_HOME}/bin/cqlsh`) and run:
+Load script [`create-log-schema.cql`](create-log-schema.cql) into CQL shell to create the schema:
+ 
+        {CASSANDRA_HOME}/bin/cqlsh --file create-log-schema.sql
 
-        CREATE KEYSPACE IF NOT EXISTS logger 
-                WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
-        USE logger;
-        
-        CREATE TABLE IF NOT EXISTS log (
-            id timeuuid PRIMARY KEY,
-            keyspace_name text,
-            column_family_name text,
-            key text,
-            column_names text,
-            operation_type text,
-            timestamp timestamp
-        );
+To make sure it was created correctly, enter CQL shell and run:
+
+        SELECT * FROM logger.log;
 
 ### Create Triggers
 
@@ -79,11 +71,11 @@ For each column family you want to log, you need to create a trigger using the f
 
 For instance:
 
-        CREATE TRIGGER product_logger ON product USING 'org.apache.cassandra.logger.LoggerTrigger';
+        CREATE TRIGGER logger ON product USING 'org.apache.cassandra.logger.LoggerTrigger';
 
 If you want to disable this trigger, you can use:
 
-        DROP TRIGGER product_logger ON product;
+        DROP TRIGGER logger ON product;
 
 Running Automated Tests
 -----------------------
