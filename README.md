@@ -160,3 +160,33 @@ The above query would give us:
     -----------------+--------------+--------------------------------------+--------------------------+-----------+-----------------
              example |      product | 6260b1a1-6f68-4c35-831a-7c38096fcc94 | 2015-02-27 23:45:36-0300 |    delete |            null
              example |      product | 6260b1a1-6f68-4c35-831a-7c38096fcc94 | 2015-02-27 23:43:59-0300 |      save |       {'price'}
+
+Running Automated Tests
+-----------------------
+
+### Running White Box Tests (Java)
+
+    gradle test
+
+You need to have Cassandra running and the log schema created, otherwise tests will fail.
+
+### Running Black Box Integration Tests (Python)
+
+You need to have Python 2.7+ installed with pip.
+
+1. Create a virtual environment (optional):
+        
+        cd integration-tests
+        virtualenv env
+        source env/bin/activate
+        cd ..
+
+2. Install Python dependencies through pip:
+
+        pip install -r integration-tests/requirements.txt
+        
+3. Run [`run-integration-tests.sh`](run-integration-tests.sh) script passing the location of your Cassandra installation:
+
+        ./run-integration-tests {CASSANDRA_HOME}
+        
+**WARNING:** the script will wipe the `logger` keyspace. You will lose all your logged data.
