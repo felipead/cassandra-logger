@@ -83,59 +83,80 @@ Customization
 
 In order to customize the names of the keyspace and table used by the logger, copy the file [`cassandra-logger.properties`](config/cassandra-logger.properties) to `{CASSANDRA_HOME}/conf` and edit it to better suit your needs. The installation script will copy this file for you automatically.
 
+*If you change the default keyspace or table names, you need to recreate the log schema with those names.*
+
 Examples
 --------
 
+For illustration purposes, let's create an example schema:
+
+    CREATE KEYSPACE example WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+    USE example;
+
 Suppose we have the following example table:
         
-    CREATE TABLE product (id uuid PRIMARY KEY, name text, price decimal)
-    CREATE TRIGGER logger ON product USING 'LogTrigger';
+    CREATE TABLE product (id uuid PRIMARY KEY, name text, price decimal);
+
+Let's add a log trigger to it:
+
+    CREATE TRIGGER logger ON product USING 'com.felipead.cassandra.logger.LogTrigger';
  
-We then insert some values into it:
+We then create some products:
  
     INSERT INTO product (id, name, price) values (uuid(), 't-shirt', 49.99);
     INSERT INTO product (id, name, price) values (uuid(), 'jeans', 99.99);
     INSERT INTO product (id, name, price) values (uuid(), 'socks', 9.99);
         
-Which gives:
+Which gives us:
  
      id                                   | name    | price
     --------------------------------------+---------+-------
-     0ee3aeb1-f3bd-445f-b503-5c57b21c1f43 |   jeans | 99.99
-     6260b1a1-6f68-4c35-831a-7c38096fcc94 |   socks |  9.99
-     33b09808-636a-44b1-9b2f-eb76615f7f34 | t-shirt | 49.99
+     16afd270-7006-4024-94a6-f1b250381762 |   socks |  9.99
+     6fe1dd30-1bbd-4193-b044-7e11e979445c | t-shirt | 49.99
+     3d0ca255-b9ae-4eaa-baf7-ac8c4b4279a1 |   jeans | 99.99
 
 Now, querying the log table:
 
-     id                                   | logged_key                           | logged_keyspace | logged_table | operation | time                     | updated_columns
-    --------------------------------------+--------------------------------------+-----------------+--------------+-----------+--------------------------+-----------------
-     8553e510-be4b-11e4-804d-ef9f87394ca6 | 6260b1a1-6f68-4c35-831a-7c38096fcc94 |            test |      product |      save | 2015-02-27 03:40:29-0300 |      name,price
-     63e0d0a0-be4b-11e4-804d-ef9f87394ca6 | 0ee3aeb1-f3bd-445f-b503-5c57b21c1f43 |            test |      product |      save | 2015-02-27 03:39:33-0300 |      name,price
-     52fc2b40-be4b-11e4-804d-ef9f87394ca6 | 33b09808-636a-44b1-9b2f-eb76615f7f34 |            test |      product |      save | 2015-02-27 03:39:05-0300 |      name,price
+     logged_keyspace | logged_table | logged_key                           | time                     | operation | updated_columns
+    -----------------+--------------+--------------------------------------+--------------------------+-----------+-------------------
+             example |      product | 3d0ca255-b9ae-4eaa-baf7-ac8c4b4279a1 | 2015-02-27 23:41:56-0300 |      save | {'name', 'price'}
+             example |      product | 6fe1dd30-1bbd-4193-b044-7e11e979445c | 2015-02-27 23:41:50-0300 |      save | {'name', 'price'}
+             example |      product | 16afd270-7006-4024-94a6-f1b250381762 | 2015-02-27 23:42:01-0300 |      save | {'name', 'price'}
      
 Let's update the price of a product:
 
     UPDATE product SET price=14.99 WHERE id=6260b1a1-6f68-4c35-831a-7c38096fcc94;
     
-The log table now contains:
+The log table now contains an entry that accounts for the update of the price column:
 
-     id                                   | logged_key                           | logged_keyspace | logged_table | operation | time                     | updated_columns
-    --------------------------------------+--------------------------------------+-----------------+--------------+-----------+--------------------------+-----------------
-     a444ed10-be4c-11e4-804d-ef9f87394ca6 | 6260b1a1-6f68-4c35-831a-7c38096fcc94 |            test |      product |      save | 2015-02-27 03:48:31-0300 |           price
-     8553e510-be4b-11e4-804d-ef9f87394ca6 | 6260b1a1-6f68-4c35-831a-7c38096fcc94 |            test |      product |      save | 2015-02-27 03:40:29-0300 |      name,price
-     63e0d0a0-be4b-11e4-804d-ef9f87394ca6 | 0ee3aeb1-f3bd-445f-b503-5c57b21c1f43 |            test |      product |      save | 2015-02-27 03:39:33-0300 |      name,price
-     52fc2b40-be4b-11e4-804d-ef9f87394ca6 | 33b09808-636a-44b1-9b2f-eb76615f7f34 |            test |      product |      save | 2015-02-27 03:39:05-0300 |      name,price
+     logged_keyspace | logged_table | logged_key                           | time                     | operation | updated_columns
+    -----------------+--------------+--------------------------------------+--------------------------+-----------+-------------------
+             example |      product | 6260b1a1-6f68-4c35-831a-7c38096fcc94 | 2015-02-27 23:43:59-0300 |      save |         {'price'}
+             example |      product | 3d0ca255-b9ae-4eaa-baf7-ac8c4b4279a1 | 2015-02-27 23:41:56-0300 |      save | {'name', 'price'}
+             example |      product | 6fe1dd30-1bbd-4193-b044-7e11e979445c | 2015-02-27 23:41:50-0300 |      save | {'name', 'price'}
+             example |      product | 16afd270-7006-4024-94a6-f1b250381762 | 2015-02-27 23:42:01-0300 |      save | {'name', 'price'}
 
 Let's delete one product:
 
-    DELETE FROM product WHERE id=33b09808-636a-44b1-9b2f-eb76615f7f34;
+    DELETE FROM product WHERE id=6260b1a1-6f68-4c35-831a-7c38096fcc94;
 
 The log table now contains a delete entry:
 
-     id                                   | logged_key                           | logged_keyspace | logged_table | operation | time                     | updated_columns
-    --------------------------------------+--------------------------------------+-----------------+--------------+-----------+--------------------------+-----------------
-     fb80c630-be4c-11e4-804d-ef9f87394ca6 | 33b09808-636a-44b1-9b2f-eb76615f7f34 |            test |      product |    delete | 2015-02-27 03:50:57-0300 |
-     a444ed10-be4c-11e4-804d-ef9f87394ca6 | 6260b1a1-6f68-4c35-831a-7c38096fcc94 |            test |      product |      save | 2015-02-27 03:48:31-0300 |           price
-     8553e510-be4b-11e4-804d-ef9f87394ca6 | 6260b1a1-6f68-4c35-831a-7c38096fcc94 |            test |      product |      save | 2015-02-27 03:40:29-0300 |      name,price
-     63e0d0a0-be4b-11e4-804d-ef9f87394ca6 | 0ee3aeb1-f3bd-445f-b503-5c57b21c1f43 |            test |      product |      save | 2015-02-27 03:39:33-0300 |      name,price
-     52fc2b40-be4b-11e4-804d-ef9f87394ca6 | 33b09808-636a-44b1-9b2f-eb76615f7f34 |            test |      product |      save | 2015-02-27 03:39:05-0300 |      name,price
+     logged_keyspace | logged_table | logged_key                           | time                     | operation | updated_columns
+    -----------------+--------------+--------------------------------------+--------------------------+-----------+-------------------
+             example |      product | 6260b1a1-6f68-4c35-831a-7c38096fcc94 | 2015-02-27 23:45:36-0300 |    delete |              null
+             example |      product | 6260b1a1-6f68-4c35-831a-7c38096fcc94 | 2015-02-27 23:43:59-0300 |      save |         {'price'}
+             example |      product | 3d0ca255-b9ae-4eaa-baf7-ac8c4b4279a1 | 2015-02-27 23:41:56-0300 |      save | {'name', 'price'}
+             example |      product | 6fe1dd30-1bbd-4193-b044-7e11e979445c | 2015-02-27 23:41:50-0300 |      save | {'name', 'price'}
+             example |      product | 16afd270-7006-4024-94a6-f1b250381762 | 2015-02-27 23:42:01-0300 |      save | {'name', 'price'}
+             
+You can filter log entries by the time they were created:
+
+    select * from logger.log where time >= '2015-02-27 23:43:00-0300' allow filtering;
+    
+The above query would give us:
+
+     logged_keyspace | logged_table | logged_key                           | time                     | operation | updated_columns
+    -----------------+--------------+--------------------------------------+--------------------------+-----------+-----------------
+             example |      product | 6260b1a1-6f68-4c35-831a-7c38096fcc94 | 2015-02-27 23:45:36-0300 |    delete |            null
+             example |      product | 6260b1a1-6f68-4c35-831a-7c38096fcc94 | 2015-02-27 23:43:59-0300 |      save |       {'price'}
