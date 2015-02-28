@@ -1,10 +1,9 @@
-package com.felipead.cassandra.logger.build;
+package com.felipead.cassandra.logger.log;
 
-import com.felipead.cassandra.logger.log.LogEntry;
 import org.apache.cassandra.config.CFMetaData;
 import org.apache.cassandra.db.Cell;
 import org.apache.cassandra.db.ColumnFamily;
-import com.felipead.cassandra.logger.log.Operation;
+import org.apache.cassandra.utils.UUIDGen;
 
 import java.util.Date;
 
@@ -12,6 +11,10 @@ public class LogEntryBuilder {
 
     public LogEntry build(ColumnFamily update, CFMetaData metadata, String keyspace, String columnFamily, String keyText) {
         LogEntry logEntry = new LogEntry();
+        Date now = new Date();
+
+        logEntry.setTime(now);
+        logEntry.setTimeUuid(UUIDGen.getTimeUUID(now.getTime()));
 
         logEntry.setLoggedKeyspace(keyspace);
         logEntry.setLoggedTable(columnFamily);
@@ -29,7 +32,6 @@ public class LogEntryBuilder {
             }
         }
 
-        logEntry.setTime(new Date());
         return logEntry;
     }
 }

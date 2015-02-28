@@ -2,10 +2,12 @@ package com.felipead.cassandra.logger.store;
 
 import com.felipead.cassandra.logger.log.LogEntry;
 import com.felipead.cassandra.logger.log.Operation;
+import org.apache.cassandra.utils.UUIDGen;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,19 +26,14 @@ public class LogEntryStoreIntegrationTest {
     
     @Test
     public void createAndRead() {
-        LogEntry created = new LogEntry();
-        created.setTime(new Date());
-        created.setLoggedKeyspace("test_keyspace");
-        created.setLoggedTable("test_table");
-        created.setLoggedKey(UUID.randomUUID().toString());
-        created.addUpdatedColumn("one");
-        created.addUpdatedColumn("two");
-        created.addUpdatedColumn("three");
-        created.setOperation(Operation.save);
+        Date now = new Date();
+        String loggedKey = UUID.randomUUID().toString();
+        
+        LogEntry created = buildLogEntry("test_keyspace", "test_table", loggedKey, now, Operation.save, "one", "two", "three");
         
         store.create(created);
         
-        LogEntry read = store.read(created.getLoggedKeyspace(), created.getLoggedTable(), created.getLoggedKey(), created.getTime());
+        LogEntry read = store.read(created.getLoggedKeyspace(), created.getLoggedTable(), created.getLoggedKey(), created.getTimeUuid());
         assertThat(read, notNullValue());
         assertThat(read, equalTo(created));
     }
@@ -46,34 +43,32 @@ public class LogEntryStoreIntegrationTest {
         String loggedKeyspace = "test_keyspace";
         String loggedTable = "test_table";
         String loggedKey = UUID.randomUUID().toString();
-
-        long timestamp = System.currentTimeMillis();
         
-        LogEntry created1 = new LogEntry();
-        created1.setTime(new Date(timestamp));
-        created1.setLoggedKeyspace(loggedKeyspace);
-        created1.setLoggedTable(loggedTable);
-        created1.setLoggedKey(loggedKey);
-        created1.addUpdatedColumn("one");
-        created1.addUpdatedColumn("two");
-        created1.addUpdatedColumn("three");
-        created1.setOperation(Operation.save);
-        
+        LogEntry created1 = buildLogEntry(loggedKeyspace, loggedTable, loggedKey, new Date(), Operation.save, "one", "two", "three");
         store.create(created1);
 
-        LogEntry created2 = new LogEntry();
-        created2.setTime(new Date(timestamp + 1000));
-        created2.setLoggedKeyspace(loggedKeyspace);
-        created2.setLoggedTable(loggedTable);
-        created2.setLoggedKey(loggedKey);
-        created2.addUpdatedColumn("hello");
-        created2.setOperation(Operation.delete);
-
+        LogEntry created2 = buildLogEntry(loggedKeyspace, loggedTable, loggedKey, new Date(), Operation.delete);
         store.create(created2);
 
-        List<LogEntry> found = store.find(loggedKeyspace, loggedTable, loggedKey);
+        List<LogEntry> found = store.findByLoggedKey(loggedKeyspace, loggedTable, loggedKey);
         assertThat(found, hasSize(greaterThanOrEqualTo(2)));
-        assertThat(found.contains(created1), is(true));
-        assertThat(found.contains(created2), is(true));
+        assertThat(found, hasItems(created1, created2));
+    }
+    
+    private LogEntry buildLogEntry(String loggedKeyspace, String loggedTable, String loggedKey,
+                                   Date time, Operation operation, String... updatedColumns) {
+        LogEntry logEntry = new LogEntry();
+        logEntry.setTime(time);
+        logEntry.setTimeUuid(UUIDGen.getTimeUUID(time.getTime()));
+        logEntry.setLoggedKeyspace(loggedKeyspace);
+        logEntry.setLoggedTable(loggedTable);
+        logEntry.setLoggedKey(loggedKey);
+        logEntry.setOperation(operation);
+        
+        logEntry.setUpdatedColumns(new HashSet<String>());
+        for (String updatedColumn : updatedColumns) {
+            logEntry.addUpdatedColumn(updatedColumn);
+        }
+        return logEntry;
     }
 }

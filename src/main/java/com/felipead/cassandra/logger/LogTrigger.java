@@ -5,7 +5,7 @@ import com.felipead.cassandra.logger.settings.Settings;
 import org.apache.cassandra.config.CFMetaData;
 import org.apache.cassandra.db.ColumnFamily;
 import org.apache.cassandra.db.Mutation;
-import com.felipead.cassandra.logger.build.LogEntryBuilder;
+import com.felipead.cassandra.logger.log.LogEntryBuilder;
 import com.felipead.cassandra.logger.settings.SettingsProvider;
 import com.felipead.cassandra.logger.store.LogEntryStore;
 import org.apache.cassandra.triggers.ITrigger;

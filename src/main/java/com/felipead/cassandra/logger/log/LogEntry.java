@@ -5,14 +5,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.util.*;
 
 public class LogEntry {
-    
+
     private String loggedKeyspace;
     private String loggedTable;
     private String loggedKey;
+    private UUID timeUuid;
     private Set<String> updatedColumns;
     private Operation operation;
     private Date time;
-
+    
     public String getLoggedKeyspace() {
         return loggedKeyspace;
     }
@@ -45,6 +46,14 @@ public class LogEntry {
         this.operation = operation;
     }
 
+    public UUID getTimeUuid() {
+        return timeUuid;
+    }
+
+    public void setTimeUuid(UUID timeUuid) {
+        this.timeUuid = timeUuid;
+    }
+
     public Date getTime() {
         return time;
     }
@@ -71,6 +80,7 @@ public class LogEntry {
     @Override
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this);
+        builder.append("timeUuid", getTimeUuid());
         builder.append("time", getTime());
         builder.append("loggedKeyspace", getLoggedKeyspace());
         builder.append("loggedTable", getLoggedTable());
@@ -87,7 +97,8 @@ public class LogEntry {
         }
         
         LogEntry other = (LogEntry)o;
-        return Objects.equals(this.time, other.time) &&
+        return Objects.equals(this.timeUuid, other.timeUuid) &&
+                Objects.equals(this.time, other.time) &&
                 Objects.equals(this.loggedKeyspace, other.loggedKeyspace) &&
                 Objects.equals(this.loggedTable, other.loggedTable) &&
                 Objects.equals(this.loggedKey, other.loggedKey) &&
@@ -97,7 +108,7 @@ public class LogEntry {
     
     @Override
     public int hashCode() {
-        return Objects.hash(this.time, this.loggedKeyspace,
+        return Objects.hash(this.timeUuid, this.time, this.loggedKeyspace,
                 this.loggedTable, this.loggedKey, this.operation, this.updatedColumns);
     }
 }

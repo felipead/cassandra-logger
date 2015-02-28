@@ -5,12 +5,12 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 import com.felipead.cassandra.logger.log.LogEntry;
-import com.google.common.collect.Lists;
 import com.felipead.cassandra.logger.log.Operation;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.EnumUtils;
 
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 
@@ -22,6 +22,7 @@ public class LogEntryStore extends AbstractCassandraStore {
     
     public void create(LogEntry entry) {
         Statement statement = QueryBuilder.insertInto(getKeyspace(), getTable())
+                .value("time_uuid", entry.getTimeUuid())
                 .value("time", entry.getTime())
                 .value("logged_keyspace", entry.getLoggedKeyspace())
                 .value("logged_table", entry.getLoggedTable())
@@ -32,7 +33,7 @@ public class LogEntryStore extends AbstractCassandraStore {
         execute(statement);
     }
 
-    public List<LogEntry> find(String loggedKeyspace, String loggedTable, String loggedKey) {
+    public List<LogEntry> findByLoggedKey(String loggedKeyspace, String loggedTable, String loggedKey) {
         Statement statement = QueryBuilder.select().all()
                 .from(getKeyspace(), getTable())
                 .where(eq("logged_keyspace", loggedKeyspace))
@@ -43,13 +44,13 @@ public class LogEntryStore extends AbstractCassandraStore {
         return toEntity(result.all());
     }
 
-    public LogEntry read(String loggedKeyspace, String loggedTable, String loggedKey, Date time) {
+    public LogEntry read(String loggedKeyspace, String loggedTable, String loggedKey, UUID timeUuid) {
         Statement statement = QueryBuilder.select().all()
                 .from(getKeyspace(), getTable())
                 .where(eq("logged_keyspace", loggedKeyspace))
                     .and(eq("logged_table", loggedTable))
                     .and(eq("logged_key", loggedKey))
-                    .and(eq("time", time));
+                    .and(eq("time_uuid", timeUuid));
 
         ResultSet result = execute(statement);
         return toEntity(result.one());
@@ -65,6 +66,7 @@ public class LogEntryStore extends AbstractCassandraStore {
     
     private LogEntry toEntity(Row row) {
         LogEntry entity = new LogEntry();
+        entity.setTimeUuid(row.getUUID("time_uuid"));
         entity.setTime(row.getDate("time"));
         entity.setLoggedKeyspace(row.getString("logged_keyspace"));
         entity.setLoggedTable(row.getString("logged_table"));
