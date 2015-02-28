@@ -6,28 +6,18 @@ Cassandra Logger
 Requirements
 ------------
 
-- Java SDK 1.7+
-- Gradle 2.x
-- Cassandra 2.1+
+- [Cassandra](http://wiki.apache.org/cassandra/GettingStarted) 2.1+
+- [Oracle JDK](http://docs.oracle.com/javase/7/docs/webnotes/install) 1.7
+- [Gradle](http://gradle.org/installation) 2.2
 
 Setup
 -----
-
-### Installing the JDK
-
-You need a Java JDK 7 or 8. Please follow the instructions from the Oracle [website](http://docs.oracle.com/javase/7/docs/webnotes/install/)
 
 ### Installing Cassandra
 
 The Trigger API was released as part of Cassandra 2.0. However, it was changed after Cassandra 2.1. This trigger *will not work* with versions of Cassandra previous to 2.1.
 
 Please follow the instructions from the Cassandra project [website](http://wiki.apache.org/cassandra/GettingStarted).
-
-### Installing Gradle
-
-Gradle is a build tool for Java, a simplified successor to the well established Maven.
-
-Please follow the instructions from the Gradle project [website](http://gradle.org/installation).
 
 ### Installing the Trigger *Automagically*
 
@@ -61,15 +51,17 @@ In case you are deploying to a multi-node clustered environment or need to troub
 
 ### Create the Schema
 
-By default, the Logger will use table `log` on keyspace `logger`. You need to create this table manually.
+*Before using the trigger you MUST create the log table schema.*
 
-Load script [`create-log-schema.cql`](create-log-schema.cql) into CQL shell to create the schema:
+To do this, load script [`create-log-schema.cql`](create-log-schema.cql) into CQL shell:
  
     {CASSANDRA_HOME}/bin/cqlsh --file create-log-schema.sql
 
 To make sure it was created correctly, enter CQL shell and run:
 
     DESCRIBE TABLE logger.log
+
+By default, the logger will use table `log` and keyspace `logger`. You can customize this by editting the settings file.
 
 Usage
 -----
