@@ -36,6 +36,7 @@ jar {
     }
 
     manifest {
-        attributes 'Implementation-Title': 'Cassandra Logger', 'Implementation-Version': version
+        attributes 'Built-By': 'Felipe Dornelas', 
+                'Implementation-Title': 'Cassandra Logger', 'Implementation-Version': version
     }
 }
