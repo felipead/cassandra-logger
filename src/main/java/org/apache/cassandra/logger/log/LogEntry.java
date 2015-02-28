@@ -2,27 +2,16 @@ package org.apache.cassandra.logger.log;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class LogEntry {
     
-    private UUID id;
     private String loggedKeyspace;
     private String loggedTable;
     private String loggedKey;
-    private List<String> updatedColumns;
+    private Set<String> updatedColumns;
     private Operation operation;
     private Date time;
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
 
     public String getLoggedKeyspace() {
         return loggedKeyspace;
@@ -56,14 +45,6 @@ public class LogEntry {
         this.operation = operation;
     }
 
-    public List<String> getUpdatedColumns() {
-        return updatedColumns;
-    }
-
-    public void setUpdatedColumns(List<String> updatedColumns) {
-        this.updatedColumns = updatedColumns;
-    }
-
     public Date getTime() {
         return time;
     }
@@ -71,17 +52,52 @@ public class LogEntry {
     public void setTime(Date time) {
         this.time = time;
     }
+
+    public Set<String> getUpdatedColumns() {
+        return updatedColumns;
+    }
+
+    public void setUpdatedColumns(Set<String> updatedColumns) {
+        this.updatedColumns = updatedColumns;
+    }
+    
+    public void addUpdatedColumn(String updatedColumn) {
+        if (this.updatedColumns == null) {
+            this.updatedColumns = new HashSet<>();
+        }
+        this.updatedColumns.add(updatedColumn);
+    }
     
     @Override
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this);
-        builder.append("id", getId());
+        builder.append("time", getTime());
         builder.append("loggedKeyspace", getLoggedKeyspace());
         builder.append("loggedTable", getLoggedTable());
         builder.append("loggedKey", getLoggedKey());
-        builder.append("updatedColumns", getUpdatedColumns());
         builder.append("operation", getOperation());
-        builder.append("time", getTime());
+        builder.append("updatedColumns", getUpdatedColumns());
         return builder.build();
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || !(o instanceof LogEntry)) {
+            return false;
+        }
+        
+        LogEntry other = (LogEntry)o;
+        return Objects.equals(this.time, other.time) &&
+                Objects.equals(this.loggedKeyspace, other.loggedKeyspace) &&
+                Objects.equals(this.loggedTable, other.loggedTable) &&
+                Objects.equals(this.loggedKey, other.loggedKey) &&
+                Objects.equals(this.operation, other.operation) &&
+                Objects.equals(this.updatedColumns, other.updatedColumns);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.time, this.loggedKeyspace,
+                this.loggedTable, this.loggedKey, this.operation, this.updatedColumns);
     }
 }
