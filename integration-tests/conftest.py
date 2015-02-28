@@ -1,10 +1,12 @@
+# Standard py.test configuration file. Fixtures defined here will be available in all modules.
+
 from cassandra.cluster import Cluster
 import pytest
 
-# py.test will ignore these files and folders
-collect_ignore = ["env"]
+from log_entry import LogEntryStore
 
-LOCALHOST = "127.0.0.1"
+# This variable tells py.test which files and folders to ignore
+collect_ignore = ["env"]
 
 
 @pytest.fixture(scope="module")
@@ -22,6 +24,11 @@ def log_table():
     return "log"
 
 
+@pytest.fixture(scope="module")
+def log_trigger_name():
+    return "com.felipead.cassandra.logger.LogTrigger"
+
+
 # noinspection PyShadowingNames
 @pytest.fixture(scope="module")
 def log_table_identifier(log_keyspace, log_table):
@@ -30,13 +37,19 @@ def log_table_identifier(log_keyspace, log_table):
 
 @pytest.fixture(scope="module")
 def cluster():
-    return Cluster([LOCALHOST])
+    return Cluster(["127.0.0.1"])
 
 
 # noinspection PyShadowingNames
 @pytest.fixture(scope="module")
 def session(cluster):
     return cluster.connect()
+
+
+# noinspection PyShadowingNames
+@pytest.fixture(scope="module")
+def log_entry_store(session, log_table_identifier):
+    return LogEntryStore(session, log_table_identifier)
 
 
 # noinspection PyShadowingNames
