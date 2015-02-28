@@ -1,0 +1,8 @@
+PyHamcrest==1.8.2
+cassandra-driver==2.1.4
+futures==2.2.0
+py==1.4.26
+pytest==2.6.4
+six==1.9.0
+test-pkg==0.0
+wsgiref==0.1.2
