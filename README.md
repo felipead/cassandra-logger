@@ -115,7 +115,7 @@ Which gives us:
      6fe1dd30-1bbd-4193-b044-7e11e979445c | t-shirt | 49.99
      3d0ca255-b9ae-4eaa-baf7-ac8c4b4279a1 |   jeans | 99.99
 
-Now, querying the log table:
+Now, querying the log table we can see that there's an entry for each product we created:
 
      logged_keyspace | logged_table | logged_key                           | time                     | operation | updated_columns
     -----------------+--------------+--------------------------------------+--------------------------+-----------+-------------------
