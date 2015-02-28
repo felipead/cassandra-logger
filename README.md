@@ -185,7 +185,7 @@ You need to have Python 2.7+ installed with pip.
 
         pip install -r integration-tests/requirements.txt
         
-3. Run [`run-integration-tests.sh`](run-integration-tests.sh) script passing the location of your Cassandra installation:
+3. Execute the [`run-integration-tests.sh`](run-integration-tests.sh) script passing the location of your Cassandra installation:
 
         ./run-integration-tests {CASSANDRA_HOME}
         
