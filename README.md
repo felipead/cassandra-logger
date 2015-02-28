@@ -7,7 +7,7 @@ Requirements
 ------------
 
 - [Cassandra](http://wiki.apache.org/cassandra/GettingStarted) 2.1+
-- [Oracle JDK](http://docs.oracle.com/javase/7/docs/webnotes/install) 1.7
+- [Oracle JDK](http://docs.oracle.com/javase/7/docs/webnotes/install) 7
 - [Gradle](http://gradle.org/installation) 2.2
 
 Setup
@@ -15,11 +15,11 @@ Setup
 
 ### Installing Cassandra
 
-The Trigger API was released as part of Cassandra 2.0. However, it was changed after Cassandra 2.1. This trigger *will not work* with versions of Cassandra previous to 2.1.
+The trigger API was released as part of Cassandra 2.0. However, it was changed after Cassandra 2.1. This trigger *will not work* with versions of Cassandra previous to 2.1.
 
 Please follow the instructions from the Cassandra project [website](http://wiki.apache.org/cassandra/GettingStarted).
 
-### Installing the Trigger *Automagically*
+### Installing the Log Trigger *Automagically*
 
 The script [`install-cassandra-trigger.sh`](install-cassandra-trigger.sh) will build and install the trigger on Cassandra *automagically*:
 
@@ -29,7 +29,7 @@ where `{CASSANDRA_HOME}` is the root of your Cassandra installation. This direct
 
 *Please notice that the trigger needs to be installed on every node of your cluster.*
 
-### Installing the Trigger *Manually*
+### Installing the Log Trigger *Manually*
 
 In case you are deploying to a multi-node clustered environment or need to troubleshoot the installation, you can install the trigger manually.
 
@@ -49,7 +49,7 @@ In case you are deploying to a multi-node clustered environment or need to troub
 
         INFO  [...] 2015-02-26 12:51:09,933 CustomClassLoader.java:87 - Loading new jar /.../apache-cassandra-2.1.3/conf/triggers/cassandra-logger-snapshot.jar
 
-### Create the Schema
+### Create the Log Schema
 
 *Before using the trigger you MUST create the log table schema.*
 
@@ -77,6 +77,11 @@ For instance:
 If you want to disable this trigger, you can use:
 
     DROP TRIGGER logger ON product;
+
+Customization
+-------------
+
+In order to customize the names of the keyspace and table used by the logger, copy the file [`cassandra-logger.properties`](config/cassandra-logger.properties) to `{CASSANDRA_HOME}/conf` and edit it to better suit your needs. The installation script will copy this file for you automatically.
 
 Examples
 --------
