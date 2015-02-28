@@ -3,8 +3,6 @@ Cassandra Logger
 
 [Trigger](http://www.datastax.com/dev/blog/whats-new-in-cassandra-2-0-prototype-triggers-support) for [Apache Cassandra](http://cassandra.apache.org) that keeps a log of all updates in a set of tables. Useful to sync Cassandra with other databases, like Solr or Elastic Search.
 
-*Version: 0.1 (Not ready for production, API may change)*
-
 Requirements
 ------------
 
@@ -31,27 +29,35 @@ Gradle is a build tool for Java, a simplified successor to the well established 
 
 Please follow the instructions from the Gradle project [website](http://gradle.org/installation).
 
-### Building the JAR
-
-Enter the project root folder and type:
-
-    gradle jar
-
-If the compilation is successful, the resulting JAR will be available at `build/libs`.
-
-### Installing the Trigger
+### Installing the Trigger *Automagically*
 
 The script [`install-cassandra-trigger.sh`](install-cassandra-trigger.sh) will build and install the trigger on Cassandra *automagically*:
 
     ./install-cassandra-trigger {CASSANDRA_HOME}
 
-where `{CASSANDRA_HOME}` is the root of your Cassandra installation. This directory needs to be writable by your user. Remember that it will not work for versions of Cassandra prior to 2.1.
-
-If cassandra is already running you should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
-
-    INFO  [...] 2015-02-26 12:51:09,933 CustomClassLoader.java:87 - Loading new jar /.../apache-cassandra-2.1.3/conf/triggers/cassandra-logger-0.1.jar
+where `{CASSANDRA_HOME}` is the root of your Cassandra installation. This directory needs to be writable by the user.
 
 *Please notice that the trigger needs to be installed on every node of your cluster.*
+
+### Installing the Trigger *Manually*
+
+In case you are deploying to a multi-node clustered environment or need to troubleshoot the installation, you can install the trigger manually.
+
+1. Build the jar:
+
+        gradle jar
+
+2. If compilation is successful, copy the jar from `build/libs` and put it inside Cassandra's triggers folder:
+
+        cp build/libs/cassandra-logger-snapshot.jar {CASSANDRA_HOME}/conf/triggers
+
+3. Start Cassandra. If it is already running, you can force reloading of the triggers by using:
+
+        {CASSANDRA_HOME}/bin/nodetool -h localhost reloadtriggers
+
+4. You should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
+
+        INFO  [...] 2015-02-26 12:51:09,933 CustomClassLoader.java:87 - Loading new jar /.../apache-cassandra-2.1.3/conf/triggers/cassandra-logger-snapshot.jar
 
 ### Create the Schema
 
