@@ -1,4 +1,4 @@
-package org.apache.cassandra.logger.store;
+package com.felipead.cassandra.logger.store;
 
 import com.datastax.driver.core.*;
 

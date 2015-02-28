@@ -1,4 +1,4 @@
-package org.apache.cassandra.logger.log;
+package com.felipead.cassandra.logger.log;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 

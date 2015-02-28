@@ -1,10 +1,10 @@
-package org.apache.cassandra.logger.build;
+package com.felipead.cassandra.logger.build;
 
+import com.felipead.cassandra.logger.log.LogEntry;
 import org.apache.cassandra.config.CFMetaData;
 import org.apache.cassandra.db.Cell;
 import org.apache.cassandra.db.ColumnFamily;
-import org.apache.cassandra.logger.log.LogEntry;
-import org.apache.cassandra.logger.log.Operation;
+import com.felipead.cassandra.logger.log.Operation;
 
 import java.util.Date;
 

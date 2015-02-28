@@ -1,7 +1,7 @@
-package org.apache.cassandra.logger.store;
+package com.felipead.cassandra.logger.store;
 
-import org.apache.cassandra.logger.log.LogEntry;
-import org.apache.cassandra.logger.log.Operation;
+import com.felipead.cassandra.logger.log.LogEntry;
+import com.felipead.cassandra.logger.log.Operation;
 import org.junit.Before;
 import org.junit.Test;
 

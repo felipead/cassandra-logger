@@ -70,11 +70,11 @@ Usage
 
 For each table you want to log, you need to create a trigger using the following CQL statement:
 
-    CREATE TRIGGER <trigger_name> ON <table> USING 'org.apache.cassandra.logger.LoggerTrigger';
+    CREATE TRIGGER <trigger_name> ON <table> USING 'com.felipead.cassandra.logger.LoggerTrigger';
 
 For instance:
 
-    CREATE TRIGGER logger ON product USING 'org.apache.cassandra.logger.LoggerTrigger';
+    CREATE TRIGGER logger ON product USING 'com.felipead.cassandra.logger.LoggerTrigger';
 
 If you want to disable this trigger, you can use:
 
@@ -86,7 +86,7 @@ Examples
 Suppose we have the following example table:
         
     CREATE TABLE product (id uuid PRIMARY KEY, name text, price decimal)
-    CREATE TRIGGER logger ON product USING 'org.apache.cassandra.logger.LoggerTrigger';
+    CREATE TRIGGER logger ON product USING 'LoggerTrigger';
  
 We then insert some values into it:
  

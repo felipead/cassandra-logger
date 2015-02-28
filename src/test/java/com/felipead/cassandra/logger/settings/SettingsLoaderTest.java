@@ -1,4 +1,4 @@
-package org.apache.cassandra.logger.settings;
+package com.felipead.cassandra.logger.settings;
 
 import org.junit.Test;
 
@@ -11,21 +11,21 @@ public class SettingsLoaderTest {
     
     @Test
     public void loadValidSettings() throws IOException {
-        Settings settings = SettingsLoader.load("org/apache/cassandra/logger/settings/ValidSettings.properties");
+        Settings settings = SettingsLoader.load("com/felipead/cassandra/logger/settings/ValidSettings.properties");
         assertThat(settings.getLogKeyspace(), is("test_logger"));
         assertThat(settings.getLogTable(), is("test_log"));
     }
 
     @Test
     public void useDefaultLogTableIfNotProvidedInSettingsFile() throws IOException {
-        Settings settings = SettingsLoader.load("org/apache/cassandra/logger/settings/SettingsWithoutLogTable.properties");
+        Settings settings = SettingsLoader.load("com/felipead/cassandra/logger/settings/SettingsWithoutLogTable.properties");
         assertThat(settings.getLogKeyspace(), is("test_logger"));
         assertThat(settings.getLogTable(), is("log"));
     }
 
     @Test
     public void useDefaultLogKeyspaceIfNotProvidedInSettingsFile() throws IOException {
-        Settings settings = SettingsLoader.load("org/apache/cassandra/logger/settings/SettingsWithoutLogKeyspace.properties");
+        Settings settings = SettingsLoader.load("com/felipead/cassandra/logger/settings/SettingsWithoutLogKeyspace.properties");
         assertThat(settings.getLogKeyspace(), is("logger"));
         assertThat(settings.getLogTable(), is("test_log"));
     }

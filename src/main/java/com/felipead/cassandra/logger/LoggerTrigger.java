@@ -1,13 +1,13 @@
-package org.apache.cassandra.logger;
+package com.felipead.cassandra.logger;
 
+import com.felipead.cassandra.logger.log.LogEntry;
+import com.felipead.cassandra.logger.settings.Settings;
 import org.apache.cassandra.config.CFMetaData;
 import org.apache.cassandra.db.ColumnFamily;
 import org.apache.cassandra.db.Mutation;
-import org.apache.cassandra.logger.build.LogEntryBuilder;
-import org.apache.cassandra.logger.log.LogEntry;
-import org.apache.cassandra.logger.settings.Settings;
-import org.apache.cassandra.logger.settings.SettingsProvider;
-import org.apache.cassandra.logger.store.LogEntryStore;
+import com.felipead.cassandra.logger.build.LogEntryBuilder;
+import com.felipead.cassandra.logger.settings.SettingsProvider;
+import com.felipead.cassandra.logger.store.LogEntryStore;
 import org.apache.cassandra.triggers.ITrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

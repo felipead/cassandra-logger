@@ -1,4 +1,4 @@
-package org.apache.cassandra.logger.settings;
+package com.felipead.cassandra.logger.settings;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

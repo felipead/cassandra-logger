@@ -1,12 +1,12 @@
-package org.apache.cassandra.logger.store;
+package com.felipead.cassandra.logger.store;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.felipead.cassandra.logger.log.LogEntry;
 import com.google.common.collect.Lists;
-import org.apache.cassandra.logger.log.LogEntry;
-import org.apache.cassandra.logger.log.Operation;
+import com.felipead.cassandra.logger.log.Operation;
 import org.apache.commons.lang3.EnumUtils;
 
 import java.util.Date;

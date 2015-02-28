@@ -1,4 +1,4 @@
-package org.apache.cassandra.logger.log;
+package com.felipead.cassandra.logger.log;
 
 public enum Operation {
     save,
