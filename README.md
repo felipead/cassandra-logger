@@ -35,7 +35,7 @@ Please follow the instructions from the Gradle project [website](http://gradle.o
 
 Enter the project root folder and type:
 
-    gradle assemble
+    gradle jar
 
 If the compilation is successful, the resulting JAR will be available at `build/libs`.
 
