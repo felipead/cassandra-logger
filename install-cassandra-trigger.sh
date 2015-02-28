@@ -31,7 +31,7 @@ if ! type "gradle" > /dev/null; then
 fi
 
 echo "Building jar with Gradle..."
-gradle clean assemble -q
+gradle clean jar -q
 
 echo "Uninstalling old jar versions..."
 rm -f ${cassandra_triggers_dir}/${jar_file}

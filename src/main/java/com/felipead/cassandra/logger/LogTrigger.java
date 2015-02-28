@@ -17,15 +17,15 @@ import java.util.Collection;
 import java.util.Collections;
 
 @SuppressWarnings("UnusedDeclaration")
-public class LoggerTrigger implements ITrigger {
+public class LogTrigger implements ITrigger {
     public static final String LOCALHOST = "127.0.0.1";
     
-    private static final Logger logger = LoggerFactory.getLogger(LoggerTrigger.class);
+    private static final Logger logger = LoggerFactory.getLogger(LogTrigger.class);
 
     private LogEntryBuilder logEntryBuilder;
     private LogEntryStore logEntryStore;
-    
-    public LoggerTrigger() {
+
+    public LogTrigger() {
         Settings settings = SettingsProvider.getSettings();
         logEntryBuilder = new LogEntryBuilder();
         logEntryStore = new LogEntryStore(LOCALHOST, settings.getLogKeyspace(), settings.getLogTable());
