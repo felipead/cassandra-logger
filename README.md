@@ -164,13 +164,13 @@ The above query would give us:
 Running Automated Tests
 -----------------------
 
-### Running White Box Tests (Java)
+### Unit Tests (Java)
 
     gradle test
 
 You need to have Cassandra running and the log schema created, otherwise tests will fail.
 
-### Running Black Box Integration Tests (Python)
+### Black Box Integration Tests (Python)
 
 You need to have Python 2.7+ installed with pip.
 
