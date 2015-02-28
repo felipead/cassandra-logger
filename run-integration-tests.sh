@@ -7,7 +7,7 @@ echo "Installing trigger..."
 sh install-cassandra-trigger.sh ${cassandra_dir}
 
 user=`whoami`
-cassandra_pid=`pgrep -u ${user} -f cassandra`
+cassandra_pid=`pgrep -u ${user} -f cassandra || true`
 
 if [ -z "${cassandra_pid}" ]; then
     echo "Cassandra is not running... Please start it manually then run this script again."

@@ -47,7 +47,7 @@ fi
 echo "The trigger was successfully installed."
 
 user=`whoami`
-cassandra_pid=`pgrep -u ${user} -f cassandra`
+cassandra_pid=`pgrep -u ${user} -f cassandra || true`
 
 if [ ! -z "${cassandra_pid}" ]; then
     echo "Cassandra is running for current user with PID ${cassandra_pid}. Atempting to reload triggers..."
