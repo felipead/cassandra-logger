@@ -28,7 +28,7 @@ def create_product(session, _id, name, quantity):
     session.execute(statement, [_id, name, quantity])
 
 
-# noinspection PyClassHasNoInit,PyMethodMayBeStatic,PyShadowingNames
+# noinspection PyClassHasNoInit,PyMethodMayBeStatic
 @pytest.mark.usefixtures("create_fixture_keyspace", "create_product_schema")
 class TestLogTrigger:
 
