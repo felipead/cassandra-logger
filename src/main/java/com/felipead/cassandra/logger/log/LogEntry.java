@@ -12,8 +12,7 @@ public class LogEntry {
     private UUID timeUuid;
     private Set<String> updatedColumns;
     private Operation operation;
-    private Date time;
-    
+
     public String getLoggedKeyspace() {
         return loggedKeyspace;
     }
@@ -54,14 +53,6 @@ public class LogEntry {
         this.timeUuid = timeUuid;
     }
 
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
     public Set<String> getUpdatedColumns() {
         return updatedColumns;
     }
@@ -81,7 +72,6 @@ public class LogEntry {
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this);
         builder.append("timeUuid", getTimeUuid());
-        builder.append("time", getTime());
         builder.append("loggedKeyspace", getLoggedKeyspace());
         builder.append("loggedTable", getLoggedTable());
         builder.append("loggedKey", getLoggedKey());
@@ -98,7 +88,6 @@ public class LogEntry {
         
         LogEntry other = (LogEntry)o;
         return Objects.equals(this.timeUuid, other.timeUuid) &&
-                Objects.equals(this.time, other.time) &&
                 Objects.equals(this.loggedKeyspace, other.loggedKeyspace) &&
                 Objects.equals(this.loggedTable, other.loggedTable) &&
                 Objects.equals(this.loggedKey, other.loggedKey) &&
@@ -108,7 +97,7 @@ public class LogEntry {
     
     @Override
     public int hashCode() {
-        return Objects.hash(this.timeUuid, this.time, this.loggedKeyspace,
+        return Objects.hash(this.timeUuid, this.loggedKeyspace,
                 this.loggedTable, this.loggedKey, this.operation, this.updatedColumns);
     }
 }

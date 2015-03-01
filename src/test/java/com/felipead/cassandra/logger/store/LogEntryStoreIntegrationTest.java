@@ -58,7 +58,6 @@ public class LogEntryStoreIntegrationTest {
     private LogEntry buildLogEntry(String loggedKeyspace, String loggedTable, String loggedKey,
                                    Date time, Operation operation, String... updatedColumns) {
         LogEntry logEntry = new LogEntry();
-        logEntry.setTime(time);
         logEntry.setTimeUuid(UUIDGen.getTimeUUID(time.getTime()));
         logEntry.setLoggedKeyspace(loggedKeyspace);
         logEntry.setLoggedTable(loggedTable);

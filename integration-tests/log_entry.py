@@ -1,3 +1,5 @@
+from time_uuid import TimeUUID
+
 
 class LogEntry(object):
 
@@ -9,6 +11,12 @@ class LogEntry(object):
     operation = None
     updated_columns = None
 
+    @property
+    def time(self):
+        if self.time_uuid is None:
+            return None
+        else:
+            return TimeUUID.upgrade(self.time_uuid).get_datetime()
 
 class LogEntryStore(object):
 
@@ -19,7 +27,7 @@ class LogEntryStore(object):
     def find_all(self):
         rows = self._session.execute(
             """
-            SELECT logged_keyspace, logged_table, logged_key, time_uuid, time, operation, updated_columns FROM %s
+            SELECT logged_keyspace, logged_table, logged_key, time_uuid, operation, updated_columns FROM %s
             """
             % self._log_table_identifier
         )
@@ -28,7 +36,7 @@ class LogEntryStore(object):
     def find_by_logged_key(self, logged_keyspace, logged_table, logged_key):
         statement = self._session.prepare(
             """
-            SELECT logged_keyspace, logged_table, logged_key, time_uuid, time, operation, updated_columns FROM %s
+            SELECT logged_keyspace, logged_table, logged_key, time_uuid, operation, updated_columns FROM %s
             WHERE logged_keyspace = ? AND logged_table = ? AND logged_key = ?
             """
             % self._log_table_identifier)
@@ -39,9 +47,8 @@ class LogEntryStore(object):
     @staticmethod
     def _to_log_entries(rows):
         log_entries = []
-        for (logged_keyspace, logged_table, logged_key, time_uuid, time, operation, updated_columns) in rows:
+        for (logged_keyspace, logged_table, logged_key, time_uuid, operation, updated_columns) in rows:
             log_entry = LogEntry()
-            log_entry.time = time
             log_entry.time_uuid = time_uuid
             log_entry.logged_keyspace = logged_keyspace
             log_entry.logged_table = logged_table

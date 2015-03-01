@@ -23,7 +23,6 @@ public class LogEntryStore extends AbstractCassandraStore {
     public void create(LogEntry entry) {
         Statement statement = QueryBuilder.insertInto(getKeyspace(), getTable())
                 .value("time_uuid", entry.getTimeUuid())
-                .value("time", entry.getTime())
                 .value("logged_keyspace", entry.getLoggedKeyspace())
                 .value("logged_table", entry.getLoggedTable())
                 .value("logged_key", entry.getLoggedKey())
@@ -67,7 +66,6 @@ public class LogEntryStore extends AbstractCassandraStore {
     private LogEntry toEntity(Row row) {
         LogEntry entity = new LogEntry();
         entity.setTimeUuid(row.getUUID("time_uuid"));
-        entity.setTime(row.getDate("time"));
         entity.setLoggedKeyspace(row.getString("logged_keyspace"));
         entity.setLoggedTable(row.getString("logged_table"));
         entity.setLoggedKey(row.getString("logged_key"));

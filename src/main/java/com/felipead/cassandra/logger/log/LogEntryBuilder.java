@@ -5,16 +5,12 @@ import org.apache.cassandra.db.Cell;
 import org.apache.cassandra.db.ColumnFamily;
 import org.apache.cassandra.utils.UUIDGen;
 
-import java.util.Date;
-
 public class LogEntryBuilder {
 
     public LogEntry build(ColumnFamily update, CFMetaData metadata, String keyspace, String columnFamily, String keyText) {
         LogEntry logEntry = new LogEntry();
-        Date now = new Date();
 
-        logEntry.setTime(now);
-        logEntry.setTimeUuid(UUIDGen.getTimeUUID(now.getTime()));
+        logEntry.setTimeUuid(UUIDGen.getTimeUUID());
 
         logEntry.setLoggedKeyspace(keyspace);
         logEntry.setLoggedTable(columnFamily);

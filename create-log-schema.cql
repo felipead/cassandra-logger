@@ -17,7 +17,6 @@ DROP TABLE IF EXISTS log;
 
 CREATE TABLE log (
     time_uuid timeuuid,
-    time timestamp,
     logged_keyspace text,
     logged_table text,
     logged_key text,
