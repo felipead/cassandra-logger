@@ -1,4 +1,4 @@
-Cassandra Logger
+CASSANDRA LOGGER
 ================
 
 [Trigger](http://www.datastax.com/dev/blog/whats-new-in-cassandra-2-0-prototype-triggers-support) for [Apache Cassandra](http://cassandra.apache.org) that keeps a log of all updates in a set of tables. Useful to sync Cassandra with other databases, like Solr or Elastic Search.
