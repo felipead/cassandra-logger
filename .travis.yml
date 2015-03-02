@@ -12,5 +12,6 @@ branches:
 
 addons:
   artifacts: true
-    paths: ./build/libs/cassandra-logger.jar
+    paths: 
+      - ./build/libs/cassandra-logger.jar
     debug: true
