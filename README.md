@@ -40,7 +40,7 @@ In case you are deploying to a multi-node clustered environment or need to troub
 
 2. If compilation is successful, copy the jar from `build/libs` and put it inside Cassandra's triggers folder:
 
-        cp build/libs/cassandra-logger-snapshot.jar {CASSANDRA_HOME}/conf/triggers
+        cp build/libs/cassandra-logger.jar {CASSANDRA_HOME}/conf/triggers
 
 3. Start Cassandra. If it is already running, you can force reloading of the triggers by using:
 
@@ -48,7 +48,7 @@ In case you are deploying to a multi-node clustered environment or need to troub
 
 4. You should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
 
-        INFO  [...] 2015-02-26 12:51:09,933 CustomClassLoader.java:87 - Loading new jar /.../apache-cassandra-2.1.3/conf/triggers/cassandra-logger-snapshot.jar
+        INFO  [...] 2015-02-26 12:51:09,933 CustomClassLoader.java:87 - Loading new jar /.../apache-cassandra-2.1.3/conf/triggers/cassandra-logger.jar
 
 ### Create the Log Schema
 
