@@ -1,16 +1,16 @@
 language: java
 
 jdk:
-  - oraclejdk7
-  - oraclejdk8
+	- oraclejdk7
+	- oraclejdk8
 
 script: gradle jar
 
 branches:
-  only:
-    - master
+	only:
+		- master
 
 addons:
-  artifacts: true
-    paths: ./build/libs/cassandra-logger.jar
-    debug: true
+	artifacts: true
+		paths: ./build/libs/cassandra-logger.jar
+		debug: true
