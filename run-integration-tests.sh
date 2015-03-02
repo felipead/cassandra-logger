@@ -3,7 +3,6 @@ set -e
 
 cassandra_dir=${1%/}
 
-echo "Installing trigger..."
 sh install-cassandra-trigger.sh ${cassandra_dir}
 
 user=`whoami`
