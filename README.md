@@ -119,7 +119,7 @@ Which gives us:
 
 Now, querying the log table we can see that there's an entry for each product we created:
 
-     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | time                     | updated_columns
+     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | dateOf(time_uuid)        | updated_columns
     -----------------+--------------+--------------------------------------+--------------------------------------+-----------+--------------------------+-------------------
              example |      product | 00672db2-6df8-48ad-b18c-75d9ca74006e | b63e4660-bfc3-11e4-bbfe-ef9f87394ca6 |      save | 2015-03-01 00:33:22-0300 | {'name', 'price'}
              example |      product | 47e50ec8-4448-4c35-a975-e0d2effccc5d | bc648630-bfc3-11e4-bbfe-ef9f87394ca6 |      save | 2015-03-01 00:33:32-0300 | {'name', 'price'}
@@ -131,7 +131,7 @@ Let's update the price of a product:
     
 The log table now contains an entry that accounts for the update of the price column:
 
-     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | time                     | updated_columns
+     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | dateOf(time_uuid)        | updated_columns
     -----------------+--------------+--------------------------------------+--------------------------------------+-----------+--------------------------+-------------------
              example |      product | 00672db2-6df8-48ad-b18c-75d9ca74006e | b63e4660-bfc3-11e4-bbfe-ef9f87394ca6 |      save | 2015-03-01 00:33:22-0300 | {'name', 'price'}
              example |      product | 47e50ec8-4448-4c35-a975-e0d2effccc5d | f6969870-bfc3-11e4-bbfe-ef9f87394ca6 |      save | 2015-03-01 00:35:10-0300 |         {'price'}
@@ -144,7 +144,7 @@ Let's delete one product:
     
 The log table now contains a delete entry:
 
-     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | time                     | updated_columns
+     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | dateOf(time_uuid)        | updated_columns
     -----------------+--------------+--------------------------------------+--------------------------------------+-----------+--------------------------+-------------------
              example |      product | 00672db2-6df8-48ad-b18c-75d9ca74006e | 6110e570-bfc4-11e4-bbfe-ef9f87394ca6 |    delete | 2015-03-01 00:38:09-0300 |              null
              example |      product | 00672db2-6df8-48ad-b18c-75d9ca74006e | b63e4660-bfc3-11e4-bbfe-ef9f87394ca6 |      save | 2015-03-01 00:33:22-0300 | {'name', 'price'}
@@ -157,7 +157,7 @@ You can filter log entries by the time they were created using `minTimeuuid` and
     SELECT * FROM logger.log WHERE time_uuid >= minTimeuuid('2015-03-01 00:35:00-0300') ALLOW FILTERING;
 
 
-     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | time                     | updated_columns
+     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | dateOf(time_uuid)        | updated_columns
     -----------------+--------------+--------------------------------------+--------------------------------------+-----------+--------------------------+-----------------
              example |      product | 00672db2-6df8-48ad-b18c-75d9ca74006e | 6110e570-bfc4-11e4-bbfe-ef9f87394ca6 |    delete | 2015-03-01 00:38:09-0300 |            null
              example |      product | 47e50ec8-4448-4c35-a975-e0d2effccc5d | f6969870-bfc3-11e4-bbfe-ef9f87394ca6 |      save | 2015-03-01 00:35:10-0300 |       {'price'}
@@ -167,7 +167,7 @@ Another example:
     SELECT * FROM logger.log WHERE time_uuid < maxTimeuuid('2015-03-01 00:34:00-0300') ALLOW FILTERING;
 
 
-     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | time                     | updated_columns
+     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | dateOf(time_uuid)        | updated_columns
     -----------------+--------------+--------------------------------------+--------------------------------------+-----------+--------------------------+-------------------
              example |      product | 00672db2-6df8-48ad-b18c-75d9ca74006e | b63e4660-bfc3-11e4-bbfe-ef9f87394ca6 |      save | 2015-03-01 00:33:22-0300 | {'name', 'price'}
              example |      product | 47e50ec8-4448-4c35-a975-e0d2effccc5d | bc648630-bfc3-11e4-bbfe-ef9f87394ca6 |      save | 2015-03-01 00:33:32-0300 | {'name', 'price'}
@@ -178,7 +178,7 @@ You can also search log entries from a particular row:
     SELECT * FROM logger.log WHERE logged_keyspace='example' AND logged_table='product' AND logged_key='47e50ec8-4448-4c35-a975-e0d2effccc5d';
 
 
-     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | time                     | updated_columns
+     logged_keyspace | logged_table | logged_key                           | time_uuid                            | operation | dateOf(time_uuid)        | updated_columns
     -----------------+--------------+--------------------------------------+--------------------------------------+-----------+--------------------------+-------------------
              example |      product | 47e50ec8-4448-4c35-a975-e0d2effccc5d | f6969870-bfc3-11e4-bbfe-ef9f87394ca6 |      save | 2015-03-01 00:35:10-0300 |         {'price'}
              example |      product | 47e50ec8-4448-4c35-a975-e0d2effccc5d | bc648630-bfc3-11e4-bbfe-ef9f87394ca6 |      save | 2015-03-01 00:33:32-0300 | {'name', 'price'}
