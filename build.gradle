@@ -1,6 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'idea'
 
+version = '0.1'
+
 repositories {
     mavenCentral()
 }
@@ -34,6 +36,6 @@ jar {
     }
 
     manifest {
-        attributes 'Built-By': 'Felipe Dornelas', 'Implementation-Title': 'Cassandra Logger'
+        attributes 'Built-By': 'Felipe Dornelas', 'Implementation-Title': 'Cassandra Logger', 'Implementation-Version': version
     }
 }
