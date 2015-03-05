@@ -13,4 +13,4 @@ branches:
 addons:
   artifacts:
     paths: 
-      - ./build/libs/cassandra-logger.jar
+      - ./build/libs/cassandra-logger-0.1.jar
