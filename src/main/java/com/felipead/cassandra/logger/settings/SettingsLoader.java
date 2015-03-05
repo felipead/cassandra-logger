@@ -5,7 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Properties;
+import java.util.Set;
 
 public class SettingsLoader {
 
@@ -16,8 +19,10 @@ public class SettingsLoader {
         Properties properties = loadPropertiesFromClassPath(fileName);
         
         Settings settings = new Settings();
-        settings.setLogKeyspace(StringUtils.strip(properties.getProperty("logKeyspace", DEFAULT_LOG_KEYSPACE)));
-        settings.setLogTable(StringUtils.strip(properties.getProperty("logTable", DEFAULT_LOG_TABLE)));
+        settings.setLogKeyspace(normalize(properties.getProperty("logKeyspace", DEFAULT_LOG_KEYSPACE)));
+        settings.setLogTable(normalize(properties.getProperty("logTable", DEFAULT_LOG_TABLE)));
+        settings.setIgnoreColumns(Collections.unmodifiableSet(
+                splitByComma(properties.getProperty("ignoreColumns"))));
         return settings;
     }
 
@@ -33,5 +38,24 @@ public class SettingsLoader {
         }
 
         return properties;
+    }
+
+    private static Set<String> splitByComma(String string) {
+        String[] tokens = StringUtils.split(string, ",");
+        Set<String> normalizedTokens = new HashSet<>();
+        if (tokens != null) {
+            for (String token : tokens) {
+                token = normalize(token);
+                if (!token.isEmpty()) {
+                    normalizedTokens.add(token);
+                }
+            }
+        }
+        return normalizedTokens;
+    }
+    
+    private static String normalize(String value) {
+        return StringUtils.strip(value);
+
     }
 }

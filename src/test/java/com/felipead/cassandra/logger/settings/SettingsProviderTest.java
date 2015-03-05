@@ -3,6 +3,7 @@ package com.felipead.cassandra.logger.settings;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 
 public class SettingsProviderTest {
@@ -12,5 +13,6 @@ public class SettingsProviderTest {
         Settings settings = SettingsProvider.getSettings();
         assertThat(settings.getLogKeyspace(), is("logger"));
         assertThat(settings.getLogTable(), is("log"));
+        assertThat(settings.getIgnoreColumns(), containsInAnyOrder("created_at", "updated_at"));
     }
 }

@@ -68,6 +68,11 @@ public class LogEntry {
         this.updatedColumns.add(updatedColumn);
     }
     
+    public boolean isMeaningful() {
+        return operation == Operation.delete || 
+                (updatedColumns != null && !updatedColumns.isEmpty());
+    }
+    
     @Override
     public String toString() {
         ToStringBuilder builder = new ToStringBuilder(this);

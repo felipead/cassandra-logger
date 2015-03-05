@@ -1,33 +1,46 @@
 package com.felipead.cassandra.logger.log;
 
-import org.apache.cassandra.config.CFMetaData;
-import org.apache.cassandra.db.Cell;
+import com.felipead.cassandra.logger.internal.ColumnFamilyUtil;
 import org.apache.cassandra.db.ColumnFamily;
 import org.apache.cassandra.utils.UUIDGen;
 
+import java.nio.ByteBuffer;
+import java.util.Collection;
+import java.util.Set;
+import java.util.UUID;
+
 public class LogEntryBuilder {
 
-    public LogEntry build(ColumnFamily update, CFMetaData metadata, String keyspace, String columnFamily, String keyText) {
+    private Collection<String> ignoreColumns;
+    
+    public void setIgnoreColumns(Collection<String> ignoreColumns) {
+        this.ignoreColumns = ignoreColumns;
+    }
+
+    public LogEntry build(ColumnFamily update, ByteBuffer key) {
         LogEntry logEntry = new LogEntry();
 
-        logEntry.setTimeUuid(UUIDGen.getTimeUUID());
+        logEntry.setTimeUuid(generateTimeUuid());
+        logEntry.setLoggedKeyspace(ColumnFamilyUtil.getKeyspaceName(update));
+        logEntry.setLoggedTable(ColumnFamilyUtil.getTableName(update));
+        logEntry.setLoggedKey(ColumnFamilyUtil.getKeyText(update, key));
 
-        logEntry.setLoggedKeyspace(keyspace);
-        logEntry.setLoggedTable(columnFamily);
-        logEntry.setLoggedKey(keyText);
-
-        if (update.isMarkedForDelete()) {
+        if (ColumnFamilyUtil.isDeleted(update)) {
             logEntry.setOperation(Operation.delete);
         } else {
             logEntry.setOperation(Operation.save);
         }
 
-        for (Cell cell : update) {
-            if (cell.value().remaining() > 0) {
-                logEntry.addUpdatedColumn(metadata.comparator.getString(cell.name()));
-            }
+        Set<String> cellNames = ColumnFamilyUtil.getCellNames(update);
+        if (this.ignoreColumns != null) {
+            cellNames.removeAll(this.ignoreColumns);
         }
-
+        
+        logEntry.setUpdatedColumns(cellNames);
         return logEntry;
+    }
+
+    private static UUID generateTimeUuid() {
+        return UUIDGen.getTimeUUID();
     }
 }
