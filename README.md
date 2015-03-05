@@ -11,6 +11,35 @@ REQUIREMENTS
 - [Oracle JDK](http://docs.oracle.com/javase/7/docs/webnotes/install) 7
 - [Gradle](http://gradle.org/installation) 2.2
 
+USAGE
+-----
+
+For each table you want to log, you need to create a trigger using the following CQL statement:
+
+    CREATE TRIGGER <trigger_name> ON <table> USING 'com.felipead.cassandra.logger.LogTrigger';
+
+For instance:
+
+    CREATE TRIGGER logger ON product USING 'com.felipead.cassandra.logger.LogTrigger';
+
+If you want to disable this trigger, you can use:
+
+    DROP TRIGGER logger ON product;
+
+Every `INSERT` or `UPDATE` made on a table that has a log trigger enabled will be logged on table `logger.log`.
+
+You can customize the name and keyspace of the log table by editing `cassandra-logger.properties`.
+
+
+ASSUMPTIONS ABOUT YOUR SCHEMA
+-----------------------------
+
+The logger currently does not support tables with composite primary keys. Please make sure all primary keys for the tables you want to log have one single column.
+
+By default, columns named `created_at` and `updated_at` will not be logged. The logger assumes they are audit timestamps. You can easily customize which columns to ignore editing the `cassandra-logger.properties`.
+
+All column names will be logged in lower case.
+
 SETUP
 -----
 
@@ -62,22 +91,7 @@ To make sure it was created correctly, enter CQL shell and run:
 
     DESCRIBE TABLE logger.log
 
-By default, the logger will use table `log` and keyspace `logger`. You can customize this by editting the settings file.
-
-USAGE
------
-
-For each table you want to log, you need to create a trigger using the following CQL statement:
-
-    CREATE TRIGGER <trigger_name> ON <table> USING 'com.felipead.cassandra.logger.LogTrigger';
-
-For instance:
-
-    CREATE TRIGGER logger ON product USING 'com.felipead.cassandra.logger.LogTrigger';
-
-If you want to disable this trigger, you can use:
-
-    DROP TRIGGER logger ON product;
+By default, the logger will use table `log` and keyspace `logger`. You can customize this by editing `cassandra-logger.properties`.
 
 CUSTOMIZATION
 -------------
@@ -198,11 +212,9 @@ You need to have Cassandra running and the log schema created, otherwise tests w
 You need to have Python 2.7+ installed with pip.
 
 1. Create a virtual environment (optional):
-        
-        cd integration-tests
+
         virtualenv env
         source env/bin/activate
-        cd ..
 
 2. Install Python dependencies through `pip`:
 
