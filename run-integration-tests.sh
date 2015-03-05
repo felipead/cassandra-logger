@@ -1,6 +1,11 @@
 #!/bin/sh
 set -e
 
+if ! type "py.test"; then
+	echo "py.test not found. Make sure both Python and requirements.txt are installed or the virtual environment is activated."
+	exit 1
+fi
+
 cassandra_dir=${1%/}
 
 sh install-cassandra-trigger.sh ${cassandra_dir}
