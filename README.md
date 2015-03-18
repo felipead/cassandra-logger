@@ -68,7 +68,7 @@ In case you are deploying to a multi-node clustered environment or need to troub
 
         gradle jar
 
-2. Copy the jar from `build/libs` (or your download folder) and put it inside Cassandra's triggers folder:
+2. Copy the jar from `build/libs` (or your downloads folder) and put it inside Cassandra's triggers folder:
 
         cp build/libs/cassandra-logger.jar {CASSANDRA_HOME}/conf/triggers
 
