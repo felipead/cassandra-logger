@@ -35,7 +35,7 @@ ASSUMPTIONS ABOUT YOUR SCHEMA
 
 The logger currently does not support tables with composite primary keys. Please make sure all primary keys for the tables you want to log have one single column.
 
-By default, column named `timestamp` will not be logged. The logger assumes this is an audit timestamp, which does not make sense to be logged. You can easily customize which columns to ignore editing the `cassandra-logger.properties`.
+By default, any column named `timestamp` will not be logged. The logger assumes this is an audit timestamp, which does not make sense to be logged. You can easily customize which columns to ignore editing the `cassandra-logger.properties`.
 
 All column names will be logged in lower case.
 
