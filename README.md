@@ -64,11 +64,11 @@ where `{CASSANDRA_HOME}` is the root of your Cassandra installation. This direct
 
 In case you are deploying to a multi-node clustered environment or need to troubleshoot the installation, you can install the trigger manually.
 
-1. Build the jar:
+1. Build the jar or download it from one of the [releases](https://github.com/felipead/cassandra-logger/releases).
 
         gradle jar
 
-2. If compilation is successful, copy the jar from `build/libs` and put it inside Cassandra's triggers folder:
+2. Copy the jar from `build/libs` (or your download folder) and put it inside Cassandra's triggers folder:
 
         cp build/libs/cassandra-logger.jar {CASSANDRA_HOME}/conf/triggers
 
