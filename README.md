@@ -28,7 +28,7 @@ If you want to disable this trigger, you can use:
 
 Every `INSERT`, `UPDATE` or `DELETE` made on a table that has a log trigger enabled will be logged on table `logger.log`.
 
-You can customize the name and keyspace of the log table by [editing file `cassandra-logger.properties`](#customization).
+You can customize the name and keyspace of the log table by editing file [`cassandra-logger.properties`](#customization).
 
 ASSUMPTIONS ABOUT YOUR SCHEMA
 -----------------------------
