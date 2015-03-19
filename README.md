@@ -50,9 +50,9 @@ The trigger API was released as part of Cassandra 2.0. However, it was changed a
 
 Please follow the instructions from the Cassandra project [website](http://wiki.apache.org/cassandra/GettingStarted).
 
-### Installing the Log Trigger *Automagically*
+### Automatic Log Trigger Installation
 
-The script [`install-cassandra-trigger.sh`](install-cassandra-trigger.sh) will build and install the trigger on Cassandra *automagically*:
+The script [`install-cassandra-trigger.sh`](install-cassandra-trigger.sh) will build and install the trigger on Cassandra automatically:
 
     ./install-cassandra-trigger {CASSANDRA_HOME}
 
@@ -60,23 +60,19 @@ where `{CASSANDRA_HOME}` is the root of your Cassandra installation. This direct
 
 *Please notice that the trigger needs to be installed on every node of your cluster.*
 
-### Installing the Log Trigger *Manually*
+### Manual Log Trigger Installation
 
 In case you are deploying to a multi-node clustered environment or need to troubleshoot the installation, you can install the trigger manually.
 
-1. Build the jar or download it from one of the [releases](https://github.com/felipead/cassandra-logger/releases).
+1. Download the jar from one of the [releases](https://github.com/felipead/cassandra-logger/releases).
 
-        gradle jar
-
-2. Copy the jar from `build/libs` (or your downloads folder) and put it inside Cassandra's triggers folder:
-
-        cp build/libs/cassandra-logger.jar {CASSANDRA_HOME}/conf/triggers
+2. Copy the jar to `{CASSANDRA_HOME}/conf/triggers`
 
 3. Start Cassandra. If it is already running, you can force reloading of the triggers by using:
 
         {CASSANDRA_HOME}/bin/nodetool -h localhost reloadtriggers
 
-4. You should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
+  You should see a line like this at `{CASSANDRA_HOME}/logs/system.log`:
 
         INFO  [...] 2015-02-26 12:51:09,933 CustomClassLoader.java:87 - Loading new jar /.../apache-cassandra-2.1.3/conf/triggers/cassandra-logger.jar
 
