@@ -10,7 +10,7 @@ REQUIREMENTS
 ------------
 
 - [Cassandra](http://wiki.apache.org/cassandra/GettingStarted) 2.1+
-- [Oracle JDK](http://docs.oracle.com/javase/7/docs/webnotes/install) 7
+- [Oracle JDK](http://docs.oracle.com/javase/7/docs/webnotes/install) 7 or 8
 - [Gradle](http://gradle.org/installation) 2.2
 
 USAGE
