@@ -4,7 +4,7 @@ CASSANDRA LOGGER
 
 [Trigger](http://www.datastax.com/dev/blog/whats-new-in-cassandra-2-0-prototype-triggers-support) for [Apache Cassandra](http://cassandra.apache.org) that keeps a log of all updates in a set of tables. Useful to sync Cassandra with other databases, such as Solr, Elasticsearch or even traditional RDBMS.
 
-You can see an example project on how to use this trigger to efficiently synchronize Cassandra and Elasticsearch  [here](http://githu.com/felipead/cassandra-elasticsearch-sync).
+You can see an example project on how to use this trigger to efficiently synchronize Cassandra and Elasticsearch  [here](http://github.com/felipead/cassandra-elasticsearch-sync).
 
 REQUIREMENTS
 ------------
